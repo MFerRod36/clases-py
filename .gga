@@ -40,11 +40,11 @@ PROVIDER="claude"
 
 # FILE*PATTERNS="*.ts,\_.tsx"
 
-# FILE_PATTERNS="\*.py"
+# FILE_PATTERNS='\*.py'
 
 # FILE*PATTERNS="*.go,\_.mod"
 
-FILE_PATTERNS="\*.py"
+FILE_PATTERNS='\*.py'
 
 # File patterns to exclude from review (comma-separated)
 
@@ -56,7 +56,7 @@ FILE_PATTERNS="\*.py"
 
 # EXCLUDE*PATTERNS="*\_test.go,\_.mock.ts"
 
-EXCLUDE*PATTERNS="\*\_test.py,test*\*.py"
+EXCLUDE_PATTERNS="*_test.py,test_*.py"
 
 # File containing code review rules
 
