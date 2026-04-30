@@ -1,4 +1,4 @@
-# Clase 01 — Fundamentos de Python
+# Fundamentos de Python
 
 ## 1. Tipos de Datos
 
@@ -6,14 +6,14 @@
 
 Python tiene tipos de datos primitivos integrados:
 
-| Tipo      | Descripción                        | Ejemplo              |
-|-----------|------------------------------------|----------------------|
-| `int`     | Entero (sin límite de tamaño)      | `42`, `-7`, `1_000`  |
-| `float`   | Número decimal (IEEE 754)          | `3.14`, `-0.5`       |
-| `complex` | Número complejo                    | `2 + 3j`             |
-| `bool`    | Booleano (subclase de `int`)       | `True`, `False`      |
-| `str`     | Cadena de texto (inmutable)        | `"hola"`             |
-| `NoneType`| Ausencia de valor                  | `None`               |
+| Tipo       | Descripción                   | Ejemplo             |
+| ---------- | ----------------------------- | ------------------- |
+| `int`      | Entero (sin límite de tamaño) | `42`, `-7`, `1_000` |
+| `float`    | Número decimal (IEEE 754)     | `3.14`, `-0.5`      |
+| `complex`  | Número complejo               | `2 + 3j`            |
+| `bool`     | Booleano (subclase de `int`)  | `True`, `False`     |
+| `str`      | Cadena de texto (inmutable)   | `"hola"`            |
+| `NoneType` | Ausencia de valor             | `None`              |
 
 Para saber el tipo de una variable usás `type()`:
 
@@ -381,6 +381,12 @@ del persona["activa"]       # elimina clave
 persona.keys()    # dict_keys(["nombre", "edad"])
 persona.values()  # dict_values(["Ana", 30])
 persona.items()   # pares clave-valor
+
+persona.pop("edad")           # elimina la clave y retorna su valor → 30
+persona.pop("altura", 0)      # si no existe, retorna el default en vez de lanzar KeyError
+
+persona.update({"email": "a@b.com", "edad": 31})  # agrega o sobreescribe múltiples claves a la vez
+persona.update(email="a@b.com", edad=31)           # misma operación con kwargs
 ```
 
 **Iterar:**
@@ -462,6 +468,97 @@ cursos = {
 
 for curso, alumnos in cursos.items():
     print(f"{curso}: {len(alumnos)} alumnos")
+```
+
+---
+
+### Métodos de conjuntos
+
+#### `add(elemento)`
+
+Agrega un elemento al set. Si el elemento **ya existe**, no hace nada — no lanza error, no crea duplicados:
+
+```python
+colores = {"rojo", "verde"}
+colores.add("azul")   # {"rojo", "verde", "azul"}
+colores.add("rojo")   # ya existe → el set queda igual, sin error
+```
+
+---
+
+#### `discard(elemento)` vs `remove(elemento)`
+
+Ambos eliminan un elemento. La diferencia está en qué pasa cuando el elemento **no existe**:
+
+```python
+colores.remove("rojo")    # si no existe → KeyError 💥
+colores.discard("rojo")   # si no existe → no pasa nada ✅
+```
+
+**Cuándo usar cada uno:**
+
+- `discard` → cuando la ausencia del elemento es válida (caso normal)
+- `remove` → cuando la ausencia indica un bug en tu lógica y querés que el error sea visible
+
+En la práctica, `discard` es la opción más común.
+
+---
+
+#### `union()` / operador `|`
+
+Combina dos sets y devuelve todos los elementos de ambos, **sin duplicados**:
+
+```python
+a = {1, 2, 3}
+b = {3, 4, 5}
+
+a.union(b)   # {1, 2, 3, 4, 5}
+a | b        # exactamente lo mismo — el operador | es un atajo
+```
+
+El `3` aparece una sola vez aunque esté en los dos sets.
+
+**Caso real:** tenés dos listas de asistentes a distintos días y querés la lista completa de personas que fueron al menos un día:
+
+```python
+lunes  = {"Ana", "Luis", "Eva"}
+martes = {"Eva", "Carlos", "Ana"}
+
+todos = lunes | martes   # {"Ana", "Luis", "Eva", "Carlos"}
+```
+
+---
+
+#### `intersection()` / operador `&`
+
+Devuelve solo los elementos que están en **ambos** sets al mismo tiempo:
+
+```python
+a = {1, 2, 3}
+b = {3, 4, 5}
+
+a.intersection(b)   # {3}
+a & b               # lo mismo
+```
+
+**Caso real:** querés saber quién asistió los dos días:
+
+```python
+lunes  = {"Ana", "Luis", "Eva"}
+martes = {"Eva", "Carlos", "Ana"}
+
+ambos_dias = lunes & martes   # {"Ana", "Eva"}
+```
+
+---
+
+#### Referencia rápida de operadores
+
+```python
+a | b   # unión → todos los elementos de ambos
+a & b   # intersección → solo los que están en los dos
+a - b   # diferencia → los de `a` que NO están en `b`
+a ^ b   # diferencia simétrica → los que están en uno pero no en el otro
 ```
 
 ---

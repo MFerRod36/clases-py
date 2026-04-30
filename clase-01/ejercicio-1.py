@@ -1,14 +1,28 @@
-def main():
-    n = [int(x) for x in input("Ingrese números: ").split()]
+"""Ejercicio práctico
+Dado un conjunto de números, crea un set para eliminar duplicados y verifica si un número dado pertenece al set.
+Entrada
+Primera línea: número entero N, cantidad de elementos
+Segunda línea: N números enteros separados por espacios
+Tercera línea: un número entero X para verificar pertenencia
+Salida
+Primera línea: el set resultante (elementos separados por espacio, orden no importa)
+Segunda línea: "Sí" si X está en el set, "No" en caso contrario
+"""
 
-    conjunto = set(n)
-    print(" ".join(str(x) for x in conjunto))
+# Leer la cantidad de elementos
+N = int(input())
 
-    x = int(input("Ingrese un número para verificar si está en el conjunto: "))
-    if x in conjunto:
-        print("Sí")
-    else:
-        print("No")
+# Leer N números enteros y crear un set para eliminar duplicados, asegurando el tope de N elementos
+numeros = set(map(int, input().split()[:N]))
 
+# Leer el número a verificar
+X = int(input())
 
-main()
+# Imprimir el set resultante
+print((" ".join(map(str, sorted(numeros)))))
+
+# Verificar si X pertenece al set
+if X in numeros:
+    print("Sí")
+else:
+    print("No")
