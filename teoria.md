@@ -26,11 +26,11 @@ for i in range(3):       # nivel 1
 
 **Convenciones de nombres (PEP 8):**
 
-| Estilo | Uso | Ejemplo |
-|--------|-----|---------|
-| `snake_case` | variables, funciones, módulos | `nombre_usuario`, `calcular_total()` |
-| `PascalCase` | clases | `ClienteVIP`, `ProductoDigital` |
-| `UPPER_SNAKE_CASE` | constantes | `MAX_INTENTOS`, `PI` |
+| Estilo             | Uso                           | Ejemplo                              |
+| ------------------ | ----------------------------- | ------------------------------------ |
+| `snake_case`       | variables, funciones, módulos | `nombre_usuario`, `calcular_total()` |
+| `PascalCase`       | clases                        | `ClienteVIP`, `ProductoDigital`      |
+| `UPPER_SNAKE_CASE` | constantes                    | `MAX_INTENTOS`, `PI`                 |
 
 **Otras buenas prácticas:**
 
@@ -613,11 +613,11 @@ La inmutabilidad es una garantía — si pasás una tupla a una función, sabés
 
 **Cuándo usar tupla vs lista:**
 
-| Tupla | Lista |
-|-------|-------|
-| Datos que no deben cambiar (coordenadas, RGB, fecha) | Datos que crecen o se modifican |
-| Retorno de múltiples valores de una función | Colección de ítems del mismo tipo |
-| Clave de diccionario (es hasheable) | Cuando necesitás append/remove |
+| Tupla                                                | Lista                             |
+| ---------------------------------------------------- | --------------------------------- |
+| Datos que no deben cambiar (coordenadas, RGB, fecha) | Datos que crecen o se modifican   |
+| Retorno de múltiples valores de una función          | Colección de ítems del mismo tipo |
+| Clave de diccionario (es hasheable)                  | Cuando necesitás append/remove    |
 
 **Métodos disponibles** (son solo dos, porque no puede modificarse):
 
@@ -849,31 +849,31 @@ help(calcular_area)            # muestra la documentación formateada
 
 Python incluye funciones disponibles en todo momento, sin importar nada:
 
-| Función | Qué hace |
-|---------|----------|
-| `len(x)` | Longitud de una secuencia |
-| `type(x)` | Tipo del objeto |
-| `isinstance(x, tipo)` | Verifica si x es de ese tipo |
-| `print(*args)` | Imprime en stdout |
-| `input(prompt)` | Lee una línea de stdin |
-| `int()`, `float()`, `str()`, `bool()` | Conversión de tipos |
-| `list()`, `tuple()`, `set()`, `dict()` | Conversión a colecciones |
-| `range(start, stop, step)` | Genera una secuencia de enteros |
-| `enumerate(iterable)` | Itera con índice |
-| `zip(*iterables)` | Itera en paralelo |
-| `sorted(iterable)` | Retorna nueva lista ordenada |
-| `reversed(iterable)` | Iterador inverso |
-| `min()`, `max()`, `sum()` | Operaciones de agregación |
-| `abs(x)` | Valor absoluto |
-| `round(x, n)` | Redondea a n decimales |
-| `any(iterable)` | `True` si al menos un elemento es verdadero |
-| `all(iterable)` | `True` si TODOS los elementos son verdaderos |
-| `map(func, iterable)` | Aplica una función a cada elemento |
-| `filter(func, iterable)` | Filtra elementos según una función |
-| `chr(n)` | Carácter Unicode del número entero `n` |
-| `ord(c)` | Número entero del carácter `c` |
-| `id(x)` | Identidad del objeto (dirección en memoria) |
-| `open(path, mode)` | Abre un archivo |
+| Función                                | Qué hace                                     |
+| -------------------------------------- | -------------------------------------------- |
+| `len(x)`                               | Longitud de una secuencia                    |
+| `type(x)`                              | Tipo del objeto                              |
+| `isinstance(x, tipo)`                  | Verifica si x es de ese tipo                 |
+| `print(*args)`                         | Imprime en stdout                            |
+| `input(prompt)`                        | Lee una línea de stdin                       |
+| `int()`, `float()`, `str()`, `bool()`  | Conversión de tipos                          |
+| `list()`, `tuple()`, `set()`, `dict()` | Conversión a colecciones                     |
+| `range(start, stop, step)`             | Genera una secuencia de enteros              |
+| `enumerate(iterable)`                  | Itera con índice                             |
+| `zip(*iterables)`                      | Itera en paralelo                            |
+| `sorted(iterable)`                     | Retorna nueva lista ordenada                 |
+| `reversed(iterable)`                   | Iterador inverso                             |
+| `min()`, `max()`, `sum()`              | Operaciones de agregación                    |
+| `abs(x)`                               | Valor absoluto                               |
+| `round(x, n)`                          | Redondea a n decimales                       |
+| `any(iterable)`                        | `True` si al menos un elemento es verdadero  |
+| `all(iterable)`                        | `True` si TODOS los elementos son verdaderos |
+| `map(func, iterable)`                  | Aplica una función a cada elemento           |
+| `filter(func, iterable)`               | Filtra elementos según una función           |
+| `chr(n)`                               | Carácter Unicode del número entero `n`       |
+| `ord(c)`                               | Número entero del carácter `c`               |
+| `id(x)`                                | Identidad del objeto (dirección en memoria)  |
+| `open(path, mode)`                     | Abre un archivo                              |
 
 ```python
 numeros = [3, 1, 4, 1, 5]
@@ -1023,7 +1023,7 @@ sumar(1, 2, 3)         # 6
 sumar(1, 2, 3, 4, 5)   # 15
 ```
 
-**`**kwargs`** — cantidad variable de argumentos por palabra clave (se reciben como diccionario):
+**`**kwargs`\*\* — cantidad variable de argumentos por palabra clave (se reciben como diccionario):
 
 ```python
 def crear_usuario(**kwargs):
@@ -1156,12 +1156,12 @@ def calcular(a, b):
 
 **Controles de ejecución:**
 
-| Acción | Tecla (VS Code) | Qué hace |
-|--------|-----------------|----------|
-| **Step Over** | F10 | Ejecuta la línea actual, no entra en funciones |
-| **Step Into** | F11 | Entra dentro de la función que se llama |
-| **Step Out** | Shift+F11 | Sale de la función actual |
-| **Continue** | F5 | Continúa hasta el próximo breakpoint |
+| Acción        | Tecla (VS Code) | Qué hace                                       |
+| ------------- | --------------- | ---------------------------------------------- |
+| **Step Over** | F10             | Ejecuta la línea actual, no entra en funciones |
+| **Step Into** | F11             | Entra dentro de la función que se llama        |
+| **Step Out**  | Shift+F11       | Sale de la función actual                      |
+| **Continue**  | F5              | Continúa hasta el próximo breakpoint           |
 
 **Inspección de variables** — en el panel Debug podés ver el valor de todas las variables locales y globales en ese momento de la ejecución.
 
@@ -1424,13 +1424,13 @@ with open("entrada.txt") as entrada, open("salida.txt", "w") as salida:
 
 **Modos de apertura de archivos:**
 
-| Modo | Descripción |
-|------|-------------|
-| `"r"` | Lectura (por defecto) |
-| `"w"` | Escritura (sobreescribe) |
-| `"a"` | Append (agrega al final) |
-| `"r+"` | Lectura y escritura |
-| `"b"` | Binario (combinable: `"rb"`, `"wb"`) |
+| Modo   | Descripción                          |
+| ------ | ------------------------------------ |
+| `"r"`  | Lectura (por defecto)                |
+| `"w"`  | Escritura (sobreescribe)             |
+| `"a"`  | Append (agrega al final)             |
+| `"r+"` | Lectura y escritura                  |
+| `"b"`  | Binario (combinable: `"rb"`, `"wb"`) |
 
 Cualquier objeto que implemente `__enter__` y `__exit__` funciona con `with` — no solo archivos. Conexiones a bases de datos, locks de threading, transacciones, etc.
 
@@ -1440,12 +1440,12 @@ Cualquier objeto que implemente `__enter__` y `__exit__` funciona con `with` —
 
 ### Conceptos: clase, objeto, instancia
 
-| Concepto | Definición | Analogía |
-|----------|-----------|---------|
-| **Clase** | Plantilla que define estructura y comportamiento | Plano de un edificio |
-| **Objeto / Instancia** | Ejemplar concreto creado a partir de la clase | El edificio construido |
-| **Atributo** | Variable que pertenece a un objeto | Las habitaciones del edificio |
-| **Método** | Función que pertenece a una clase | Las acciones que puede hacer el edificio |
+| Concepto               | Definición                                       | Analogía                                 |
+| ---------------------- | ------------------------------------------------ | ---------------------------------------- |
+| **Clase**              | Plantilla que define estructura y comportamiento | Plano de un edificio                     |
+| **Objeto / Instancia** | Ejemplar concreto creado a partir de la clase    | El edificio construido                   |
+| **Atributo**           | Variable que pertenece a un objeto               | Las habitaciones del edificio            |
+| **Método**             | Función que pertenece a una clase                | Las acciones que puede hacer el edificio |
 
 ```python
 class Perro:       # definición de la clase (el molde)
@@ -1519,15 +1519,15 @@ repr(ana)                     # "Persona(nombre='Ana', edad=31)" — usa __repr_
 
 ### Convenciones idiomáticas en Python para clases
 
-| Elemento | Convención | Ejemplo |
-|----------|-----------|---------|
-| Nombre de clase | `PascalCase` | `ClienteVIP`, `ProductoDigital` |
-| Atributos y métodos | `snake_case` | `nombre_completo`, `calcular_total()` |
-| Primer parámetro de instancia | siempre `self` | `def saludar(self):` |
-| Atributo "protegido" (interno) | prefijo `_` | `self._saldo` |
-| Atributo "privado" (name mangling) | prefijo `__` | `self.__password` |
-| Constructor | `__init__` | `def __init__(self, ...)` |
-| Representación string | `__str__` | `def __str__(self):` |
+| Elemento                           | Convención     | Ejemplo                               |
+| ---------------------------------- | -------------- | ------------------------------------- |
+| Nombre de clase                    | `PascalCase`   | `ClienteVIP`, `ProductoDigital`       |
+| Atributos y métodos                | `snake_case`   | `nombre_completo`, `calcular_total()` |
+| Primer parámetro de instancia      | siempre `self` | `def saludar(self):`                  |
+| Atributo "protegido" (interno)     | prefijo `_`    | `self._saldo`                         |
+| Atributo "privado" (name mangling) | prefijo `__`   | `self.__password`                     |
+| Constructor                        | `__init__`     | `def __init__(self, ...)`             |
+| Representación string              | `__str__`      | `def __str__(self):`                  |
 
 El prefijo `_` es una **convención** — Python no impide el acceso, pero señala "esto es interno, no lo uses desde afuera".
 
@@ -1597,16 +1597,16 @@ Agregación:   Universidad ◇──── Estudiante  (cierra la uni → el est
 
 **Mapeo UML → Python:**
 
-| UML | Python |
-|-----|--------|
-| Caja de clase | `class NombreClase:` |
-| Atributo de instancia | `self.nombre` en `__init__` |
-| `+` público | sin prefijo |
-| `-` privado | prefijo `__` |
-| `#` protegido | prefijo `_` |
-| Atributo de clase | variable dentro de la clase, fuera de `__init__` |
-| Herencia `──▷` | `class Subclase(Base):` |
-| Composición `◆──` | `self.parte = Parte()` dentro de `__init__` |
+| UML                   | Python                                           |
+| --------------------- | ------------------------------------------------ |
+| Caja de clase         | `class NombreClase:`                             |
+| Atributo de instancia | `self.nombre` en `__init__`                      |
+| `+` público           | sin prefijo                                      |
+| `-` privado           | prefijo `__`                                     |
+| `#` protegido         | prefijo `_`                                      |
+| Atributo de clase     | variable dentro de la clase, fuera de `__init__` |
+| Herencia `──▷`        | `class Subclase(Base):`                          |
+| Composición `◆──`     | `self.parte = Parte()` dentro de `__init__`      |
 
 **Buenas prácticas:**
 
@@ -1676,11 +1676,11 @@ issubclass(Animal, Perro)   # False
 
 Python no tiene modificadores de acceso reales (`private`, `protected`). Usa **convenciones**:
 
-| Prefijo | Significado | Acceso desde afuera |
-|---------|-------------|---------------------|
-| sin prefijo | público | libre |
-| `_nombre` | "protegido" — uso interno | posible, pero no deberías |
-| `__nombre` | "privado" — name mangling | `obj._Clase__nombre` (técnicamente posible pero nunca lo hagas) |
+| Prefijo     | Significado               | Acceso desde afuera                                             |
+| ----------- | ------------------------- | --------------------------------------------------------------- |
+| sin prefijo | público                   | libre                                                           |
+| `_nombre`   | "protegido" — uso interno | posible, pero no deberías                                       |
+| `__nombre`  | "privado" — name mangling | `obj._Clase__nombre` (técnicamente posible pero nunca lo hagas) |
 
 ```python
 class CuentaBancaria:
@@ -1833,12 +1833,12 @@ class Auto:
 
 **Regla práctica:** si podés decir "X es un Y", usá herencia. Si decís "X tiene un Y", usá composición. Cuando dudes, preferí composición — es más flexible y menos acoplada.
 
-| | Herencia | Composición |
-|---|---|---|
-| Vínculo | "es-un" | "tiene-un" |
-| Acoplamiento | alto | bajo |
-| Flexibilidad | baja (estática) | alta (swappable) |
-| Reutilización | implícita | explícita |
+|               | Herencia        | Composición      |
+| ------------- | --------------- | ---------------- |
+| Vínculo       | "es-un"         | "tiene-un"       |
+| Acoplamiento  | alto            | bajo             |
+| Flexibilidad  | baja (estática) | alta (swappable) |
+| Reutilización | implícita       | explícita        |
 
 ### Patrón Mixin
 
@@ -1899,7 +1899,7 @@ class Stack(list):
 
 ### ¿Qué es el MRO?
 
-El **Method Resolution Order** (MRO) define el orden en que Python busca un método o atributo cuando hay herencia. Es la respuesta a: *"¿en qué clase busco primero?"*
+El **Method Resolution Order** (MRO) define el orden en que Python busca un método o atributo cuando hay herencia. Es la respuesta a: _"¿en qué clase busco primero?"_
 
 ```python
 class A:
@@ -1956,6 +1956,7 @@ Sin C3, si `A` apareciera dos veces el resultado sería ambiguo. C3 garantiza qu
 ### Algoritmo C3 — Linearización
 
 C3 construye el MRO con tres reglas:
+
 1. Una subclase siempre aparece antes que sus bases
 2. El orden de las bases se respeta tal como se declaró
 3. Si una clase aparece en múltiples lugares, se incluye en el último posible
