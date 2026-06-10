@@ -2097,3 +2097,982 @@ def procesar(animal: Hablante):
 ```
 
 Duck typing hace que las funciones sean reutilizables sin acoplarse a jerarquías de clases. Es la base de patrones como el Iterator, Context Manager y muchos otros protocolos de Python.
+
+---
+
+## 11. Scripts, Módulos y Paquetes
+
+### ¿Qué es un script en Python?
+
+Un **script** es un archivo `.py` que se ejecuta directamente desde la terminal. Es la forma más simple de programa en Python: un archivo, una tarea.
+
+```bash
+python mi_script.py
+```
+
+Cuando Python ejecuta un archivo así, recorre el código de arriba a abajo y ejecuta todo lo que encuentra en el nivel raíz — funciones, clases, llamadas, impresiones. Eso puede ser un problema si el archivo también va a ser importado por otro módulo.
+
+---
+
+#### Función `main()` y la estructura recomendada
+
+Sin estructura, el código ejecutable queda suelto en el nivel raíz del archivo. Eso funciona para scripts chicos, pero escala mal: es difícil de testear, de reutilizar, y de leer.
+
+La convención es encapsular toda la lógica principal en una función `main()`:
+
+```python
+# ❌ Sin estructura — todo en el nivel raíz
+nombre = input("¿Cómo te llamás? ")
+print(f"Hola, {nombre}")
+```
+
+```python
+# ✅ Con estructura recomendada
+def main():
+    nombre = input("¿Cómo te llamás? ")
+    print(f"Hola, {nombre}")
+
+
+if __name__ == "__main__":
+    main()
+```
+
+La función `main()` no es obligatoria por el lenguaje — es una **convención**. Python no la busca automáticamente como lo haría C o Java. Vos la llamás explícitamente desde el bloque `if __name__ == "__main__"`.
+
+---
+
+#### ¿Qué es `__name__ == "__main__"`?
+
+Cada archivo Python tiene una variable especial llamada `__name__`. Su valor cambia dependiendo de cómo se usa el archivo:
+
+| Situación                              | Valor de `__name__`  |
+| -------------------------------------- | -------------------- |
+| El archivo se ejecuta directamente     | `"__main__"`         |
+| El archivo es importado por otro       | El nombre del módulo |
+
+Esto permite que un mismo archivo funcione como script ejecutable **y** como módulo importable, sin ejecutar código de más:
+
+```python
+# saludar.py
+
+def saludar(nombre):
+    print(f"Hola, {nombre}")
+
+
+if __name__ == "__main__":
+    saludar("Mundo")   # solo se ejecuta si corrés este archivo directamente
+```
+
+Si alguien hace `import saludar` desde otro archivo, la función `saludar()` queda disponible pero el `print` no se dispara. Sin este bloque, importar el módulo ejecutaría el código, lo que casi nunca es lo que querés.
+
+**Ejemplo práctico completo:**
+
+```python
+# calculadora.py
+
+def sumar(a, b):
+    return a + b
+
+def restar(a, b):
+    return a - b
+
+def main():
+    resultado = sumar(10, 5)
+    print(f"10 + 5 = {resultado}")
+
+if __name__ == "__main__":
+    main()
+```
+
+```bash
+$ python calculadora.py
+10 + 5 = 15
+```
+
+```python
+# otro_archivo.py
+import calculadora
+
+print(calculadora.sumar(3, 4))   # 7 — sin efectos secundarios
+```
+
+---
+
+### ¿Qué es un módulo en Python?
+
+Un **módulo** es cualquier archivo `.py`. Cuando lo importás desde otro archivo, Python lo trata como un módulo — te da acceso a sus funciones, clases y variables.
+
+La librería estándar de Python es una colección de módulos listos para usar: `math`, `os`, `random`, `datetime`, y muchos más. No necesitás instalar nada.
+
+---
+
+#### Formas básicas de importar módulos
+
+```python
+import math                      # importa el módulo completo
+math.sqrt(16)                    # accedés con el prefijo del módulo — 4.0
+
+from math import sqrt            # importa solo lo que necesitás
+sqrt(16)                         # usás directamente sin prefijo — 4.0
+
+from math import sqrt, pi        # importás múltiples elementos
+print(pi)                        # 3.141592653589793
+
+import math as m                 # alias — útil para nombres largos
+m.sqrt(16)
+
+from math import sqrt as raiz    # alias para el elemento importado
+raiz(25)                         # 5.0
+```
+
+`from modulo import *` — importa todo lo público del módulo. **Evitalo**: contamina el espacio de nombres, hace difícil saber de dónde viene cada cosa, y puede pisar variables existentes sin avisar.
+
+```python
+# ❌ Evitar
+from math import *
+
+# ✅ Explícito es mejor que implícito
+from math import sqrt, pi, floor
+```
+
+**Orden correcto de imports** (PEP 8) — siempre en este orden, separados por una línea en blanco:
+
+```python
+# 1. Librería estándar
+import os
+import math
+
+# 2. Terceros (instalados con pip)
+import requests
+
+# 3. Módulos propios del proyecto
+from mi_modulo import mi_funcion
+```
+
+---
+
+#### Buenas prácticas para evitar ejecuciones no deseadas
+
+El problema clásico: escribís código en el nivel raíz de un módulo pensando que solo se usa ahí, y cuando alguien lo importa, ese código se ejecuta solo.
+
+```python
+# ❌ operaciones.py — código suelto en el nivel raíz
+def multiplicar(a, b):
+    return a * b
+
+print("Módulo cargado")          # se imprime al importar — no deseado
+resultado = multiplicar(3, 4)    # se ejecuta al importar — no deseado
+```
+
+```python
+# ✅ operaciones.py — código de ejecución protegido
+def multiplicar(a, b):
+    return a * b
+
+if __name__ == "__main__":
+    print("Módulo cargado")
+    resultado = multiplicar(3, 4)
+    print(resultado)
+```
+
+**Regla simple:** en un módulo, el nivel raíz solo debe tener definiciones (funciones, clases, constantes). Todo lo que *hace* algo va adentro de `if __name__ == "__main__"` o dentro de funciones.
+
+---
+
+#### Manejo seguro de archivos con `with`
+
+Cuando abrís un archivo con `open()`, tenés que cerrarlo. Si no lo hacés — o si ocurre un error antes de llegar al `close()` — el archivo puede quedar bloqueado o corrompido.
+
+```python
+# ❌ Sin with — el archivo puede no cerrarse si ocurre un error
+archivo = open("datos.txt", "r")
+contenido = archivo.read()
+archivo.close()
+```
+
+```python
+# ✅ Con with — el archivo se cierra automáticamente, incluso si hay un error
+with open("datos.txt", "r") as archivo:
+    contenido = archivo.read()
+```
+
+`with` usa el protocolo de **Context Manager** — al salir del bloque (con o sin error), Python llama a `__exit__()` automáticamente. No tenés que acordarte de cerrar nada.
+
+**Modos de apertura más comunes:**
+
+| Modo  | Descripción                                              |
+| ----- | -------------------------------------------------------- |
+| `"r"` | Lectura (por defecto). Falla si el archivo no existe.   |
+| `"w"` | Escritura. Crea el archivo o lo sobreescribe si existe. |
+| `"a"` | Append. Agrega al final sin borrar el contenido previo. |
+| `"x"` | Creación exclusiva. Falla si el archivo ya existe.      |
+
+**Leer línea por línea** — eficiente para archivos grandes:
+
+```python
+with open("datos.txt", "r", encoding="utf-8") as archivo:
+    for linea in archivo:
+        print(linea.strip())   # strip() elimina el \n del final
+```
+
+**Escribir en un archivo:**
+
+```python
+with open("salida.txt", "w", encoding="utf-8") as archivo:
+    archivo.write("Primera línea\n")
+    archivo.write("Segunda línea\n")
+```
+
+---
+
+#### Errores comunes y encoding
+
+El error más frecuente con archivos es no especificar el encoding:
+
+```python
+# ❌ Sin encoding — comportamiento depende del sistema operativo
+with open("datos.txt", "r") as archivo:
+    contenido = archivo.read()   # puede fallar con caracteres especiales (ñ, á, é...)
+```
+
+```python
+# ✅ Siempre especificá el encoding
+with open("datos.txt", "r", encoding="utf-8") as archivo:
+    contenido = archivo.read()
+```
+
+**Errores comunes:**
+
+```python
+# FileNotFoundError — el archivo no existe al leer
+with open("no_existe.txt", "r") as f:
+    ...   # 💥 FileNotFoundError
+
+# UnicodeDecodeError — el archivo tiene otro encoding
+with open("archivo.txt", "r", encoding="utf-8") as f:
+    ...   # 💥 UnicodeDecodeError si el archivo está en latin-1
+
+# PermissionError — no tenés permisos sobre el archivo
+with open("/etc/shadow", "r") as f:
+    ...   # 💥 PermissionError
+```
+
+La forma correcta de manejarlos:
+
+```python
+try:
+    with open("datos.txt", "r", encoding="utf-8") as archivo:
+        contenido = archivo.read()
+except FileNotFoundError:
+    print("El archivo no existe")
+except UnicodeDecodeError:
+    print("Problema de encoding — probá con encoding='latin-1'")
+```
+
+---
+
+### ¿Qué es un paquete en Python?
+
+Un **paquete** es una carpeta que contiene módulos `.py` y un archivo especial `__init__.py`. Sirve para organizar módulos relacionados bajo un mismo nombre.
+
+Si un módulo es un archivo, un paquete es una carpeta de módulos. Y así como podés anidar carpetas, podés anidar paquetes.
+
+---
+
+#### Estructura básica de un paquete
+
+```
+mi_paquete/
+├── __init__.py
+├── modulo_a.py
+└── modulo_b.py
+```
+
+Para usar el paquete:
+
+```python
+import mi_paquete.modulo_a
+mi_paquete.modulo_a.mi_funcion()
+
+from mi_paquete import modulo_a
+modulo_a.mi_funcion()
+
+from mi_paquete.modulo_a import mi_funcion
+mi_funcion()
+```
+
+---
+
+#### ¿Para qué sirve `__init__.py`?
+
+`__init__.py` le dice a Python que esa carpeta es un paquete — sin él, Python no la reconoce como tal (en versiones modernas existe el concepto de *namespace packages* sin `__init__.py`, pero para proyectos normales siempre lo necesitás).
+
+Puede estar **vacío** — solo para marcar la carpeta — o puede tener código que se ejecuta al importar el paquete:
+
+```python
+# mi_paquete/__init__.py — vacío, solo marca la carpeta como paquete
+```
+
+```python
+# mi_paquete/__init__.py — con contenido útil
+from .modulo_a import mi_funcion    # re-exporta para simplificar imports
+
+VERSION = "1.0.0"                   # metadatos del paquete
+```
+
+Con el segundo enfoque, el usuario del paquete puede importar directamente desde el paquete sin conocer la estructura interna:
+
+```python
+# ✅ Import simplificado gracias al __init__.py
+from mi_paquete import mi_funcion
+
+# Sin __init__.py configurado, necesitarías saber dónde vive
+from mi_paquete.modulo_a import mi_funcion
+```
+
+---
+
+#### Estructura recomendada para proyectos pequeños
+
+```
+mi_proyecto/
+├── main.py                  ← punto de entrada
+├── requirements.txt         ← dependencias del proyecto
+├── README.md
+├── mi_paquete/
+│   ├── __init__.py
+│   ├── logica.py            ← lógica de negocio
+│   └── utilidades.py        ← funciones de soporte
+└── tests/
+    ├── __init__.py
+    └── test_logica.py
+```
+
+`main.py` es el archivo que el usuario ejecuta. El resto del código vive en el paquete, organizado por responsabilidad.
+
+```python
+# main.py
+from mi_paquete.logica import procesar_datos
+
+if __name__ == "__main__":
+    procesar_datos()
+```
+
+---
+
+#### Buenas prácticas para nombres y organización
+
+**Nombres:**
+
+```
+# ✅ Nombres de paquetes y módulos — snake_case, cortos, descriptivos
+procesador_texto/
+utilidades/
+gestion_usuarios/
+
+# ❌ Evitar
+ProcessadorTexto/    — PascalCase no va en módulos/paquetes
+utils/               — demasiado genérico
+p/                   — demasiado corto, sin significado
+```
+
+**Organización:** cada módulo tiene una responsabilidad clara. Si un módulo hace demasiadas cosas, es señal de que hay que dividirlo.
+
+```
+# ❌ Un solo archivo para todo
+mi_app/
+└── todo.py    ← usuarios, productos, pagos, emails — un desastre
+
+# ✅ Separado por responsabilidad
+mi_app/
+├── usuarios.py
+├── productos.py
+├── pagos.py
+└── notificaciones.py
+```
+
+**Imports relativos dentro del paquete** — usá `.` para referirte a módulos del mismo paquete:
+
+```python
+# mi_paquete/logica.py
+from .utilidades import formatear_fecha   # import relativo — el punto es "este paquete"
+from mi_paquete.utilidades import formatear_fecha   # import absoluto — equivalente
+```
+
+Los imports relativos son más resistentes a cambios de nombre del paquete. Los absolutos son más explícitos. Elegí uno y sé consistente.
+
+---
+
+#### Preparar el proyecto para compartir y pruebas
+
+**`requirements.txt`** — lista las dependencias externas para que otros puedan instalarlas:
+
+```
+# requirements.txt
+requests==2.31.0
+pytest==8.0.0
+```
+
+```bash
+pip install -r requirements.txt   # instala todo de una vez
+pip freeze > requirements.txt     # genera el archivo desde el entorno actual
+```
+
+**`tests/`** — los tests van en una carpeta separada, espejando la estructura del paquete:
+
+```
+tests/
+├── __init__.py
+├── test_logica.py       ← tests para mi_paquete/logica.py
+└── test_utilidades.py   ← tests para mi_paquete/utilidades.py
+```
+
+Cada archivo de test empieza con `test_` — pytest los descubre automáticamente.
+
+```python
+# tests/test_logica.py
+from mi_paquete.logica import sumar
+
+def test_sumar_positivos():
+    assert sumar(2, 3) == 5
+
+def test_sumar_negativos():
+    assert sumar(-1, -1) == -2
+```
+
+```bash
+pytest            # corre todos los tests
+pytest -v         # modo verbose — muestra cada test individualmente
+```
+
+**Checklist antes de compartir un proyecto:**
+
+- `__init__.py` presente en cada carpeta que sea paquete
+- `requirements.txt` actualizado
+- `if __name__ == "__main__"` en todos los módulos con código ejecutable
+- Encoding explícito (`encoding="utf-8"`) en todo `open()`
+- Tests corriendo sin errores con `pytest`
+
+---
+
+## 12. Persistencia y Tipos de Archivos
+
+### Persistencia de datos
+
+Un programa que no guarda nada pierde todo al cerrarse. **Persistencia** es la capacidad de guardar datos más allá de la ejecución del programa — en archivos, bases de datos, o cualquier otro medio de almacenamiento.
+
+El mecanismo más simple es escribir a un archivo. No necesitás ninguna dependencia externa, funciona en cualquier sistema operativo, y los datos quedan en un formato que podés abrir con cualquier editor.
+
+---
+
+### Tipos de archivos: Texto vs Binario
+
+Todo archivo en disco es una secuencia de bytes. La diferencia está en cómo los interpretás:
+
+| Característica      | Archivo de texto                          | Archivo binario                        |
+| ------------------- | ----------------------------------------- | -------------------------------------- |
+| Contenido           | Bytes que representan caracteres (UTF-8)  | Bytes con cualquier significado        |
+| Legible por humanos | Sí — abrís con un editor y lo entendés   | No — necesitás el programa correcto    |
+| Ejemplos            | `.txt`, `.py`, `.csv`, `.json`, `.html`   | `.png`, `.mp3`, `.pdf`, `.exe`, `.db`  |
+| Modo en Python      | `"r"`, `"w"`, `"a"`                       | `"rb"`, `"wb"`, `"ab"`                |
+| Saltos de línea     | Python convierte `\n` según el SO        | Sin conversión — bytes exactos         |
+
+Para texto, Python hace una traducción automática de saltos de línea: en Windows `\r\n` se convierte a `\n` al leer, y `\n` se convierte a `\r\n` al escribir. En modo binario, los bytes llegan exactos — sin ninguna transformación.
+
+```python
+# Texto — Python interpreta los bytes como caracteres
+with open("notas.txt", "r", encoding="utf-8") as f:
+    contenido = f.read()   # str
+
+# Binario — Python te da los bytes crudos
+with open("imagen.png", "rb") as f:
+    datos = f.read()       # bytes
+```
+
+---
+
+### Consideraciones sobre encoding
+
+El **encoding** define cómo se traduce un carácter a bytes. El mismo texto guardado con encodings distintos produce bytes distintos — y leerlo con el encoding equivocado produce basura o un error.
+
+```
+"ñ" en UTF-8    → b'\xc3\xb1'  (2 bytes)
+"ñ" en latin-1  → b'\xf1'      (1 byte)
+```
+
+**UTF-8** es el estándar universal hoy. Úsalo siempre a menos que tengas una razón explícita para no hacerlo:
+
+```python
+# ✅ Siempre especificá el encoding
+with open("datos.txt", "r", encoding="utf-8") as f:
+    contenido = f.read()
+
+# ❌ Sin encoding — Python usa el default del sistema operativo
+# En Windows puede ser "cp1252", en Linux "utf-8" — comportamiento inconsistente
+with open("datos.txt", "r") as f:
+    contenido = f.read()
+```
+
+---
+
+### Modos de apertura de archivos en Python
+
+```python
+open(archivo, modo, encoding)
+```
+
+| Modo   | Acción                                                                 |
+| ------ | ---------------------------------------------------------------------- |
+| `"r"`  | Lectura. Falla con `FileNotFoundError` si el archivo no existe.       |
+| `"w"`  | Escritura. Crea el archivo si no existe. **Sobreescribe** si existe.  |
+| `"a"`  | Append. Agrega al final. Crea el archivo si no existe.                |
+| `"x"`  | Creación exclusiva. Falla con `FileExistsError` si ya existe.         |
+| `"r+"` | Lectura y escritura. El archivo debe existir.                         |
+| `"rb"` | Lectura binaria.                                                       |
+| `"wb"` | Escritura binaria.                                                     |
+
+El modo `"w"` es destructivo — sobreescribe sin aviso. Si necesitás preservar el contenido existente, usá `"a"`.
+
+---
+
+### Permisos y rutas
+
+**Rutas absolutas vs relativas:**
+
+```python
+# Ruta absoluta — funciona desde cualquier lugar
+open("C:/Users/usuario/datos.txt", "r")
+
+# Ruta relativa — relativa al directorio desde donde ejecutás el script
+open("datos.txt", "r")           # busca en el directorio actual
+open("datos/notas.txt", "r")     # busca en la subcarpeta datos/
+```
+
+El problema con las rutas relativas es que dependen de *dónde* ejecutás el script, no de *dónde está* el script. Si ejecutás desde otra carpeta, la ruta no apunta donde esperás.
+
+La solución correcta es construir la ruta relativa al script usando `__file__`:
+
+```python
+from pathlib import Path
+
+BASE = Path(__file__).parent       # carpeta donde está este archivo .py
+ruta = BASE / "datos" / "notas.txt"
+
+with open(ruta, "r", encoding="utf-8") as f:
+    contenido = f.read()
+```
+
+Así el archivo siempre se busca relativo al script, sin importar desde dónde lo ejecutás.
+
+---
+
+## 13. Archivos de Texto
+
+### Lectura y escritura con `with`
+
+El bloque `with` garantiza que el archivo se cierre al salir, incluso si ocurre un error. Es la única forma correcta de trabajar con archivos.
+
+```python
+# Escritura
+with open("notas.txt", "w", encoding="utf-8") as f:
+    f.write("Primera línea\n")
+    f.write("Segunda línea\n")
+
+# Lectura
+with open("notas.txt", "r", encoding="utf-8") as f:
+    contenido = f.read()
+    print(contenido)
+```
+
+---
+
+### Métodos para leer archivos
+
+```python
+with open("datos.txt", "r", encoding="utf-8") as f:
+    todo = f.read()          # str con todo el contenido — carga el archivo entero en memoria
+
+with open("datos.txt", "r", encoding="utf-8") as f:
+    lineas = f.readlines()   # lista de str, una por línea — incluye el \n al final
+
+with open("datos.txt", "r", encoding="utf-8") as f:
+    linea = f.readline()     # lee una sola línea — útil para procesar de a poco
+```
+
+Para archivos grandes, iterar directamente es lo más eficiente — no carga todo en memoria:
+
+```python
+with open("datos.txt", "r", encoding="utf-8") as f:
+    for linea in f:
+        print(linea.strip())   # strip() elimina \n y espacios en los extremos
+```
+
+**Cuándo usar cada uno:**
+
+| Método        | Cuándo usarlo                                              |
+| ------------- | ---------------------------------------------------------- |
+| `read()`      | Archivos chicos donde necesitás todo el contenido a la vez |
+| `readlines()` | Cuando necesitás la lista completa de líneas en memoria   |
+| `readline()`  | Procesamiento manual línea por línea con control preciso  |
+| `for linea`   | Archivos grandes — es la opción más eficiente              |
+
+---
+
+### Escritura en archivos
+
+```python
+# write() — escribe un str, sin \n automático
+with open("salida.txt", "w", encoding="utf-8") as f:
+    f.write("Línea uno\n")
+    f.write("Línea dos\n")
+
+# writelines() — escribe una lista de str, tampoco agrega \n automático
+lineas = ["Línea uno\n", "Línea dos\n", "Línea tres\n"]
+with open("salida.txt", "w", encoding="utf-8") as f:
+    f.writelines(lineas)
+
+# Agregar al final sin sobreescribir
+with open("log.txt", "a", encoding="utf-8") as f:
+    f.write("Nueva entrada\n")
+```
+
+---
+
+### Manejo de errores comunes y encoding
+
+```python
+try:
+    with open("datos.txt", "r", encoding="utf-8") as f:
+        contenido = f.read()
+except FileNotFoundError:
+    print("El archivo no existe")
+except PermissionError:
+    print("No tenés permisos para leer este archivo")
+except UnicodeDecodeError:
+    print("El archivo no está en UTF-8 — probá encoding='latin-1'")
+```
+
+`UnicodeDecodeError` es el error más frecuente con archivos de texto. Pasa cuando el archivo fue guardado con un encoding distinto al que usás para leerlo. La solución es identificar el encoding correcto:
+
+```python
+# Archivos de Windows antiguos suelen estar en latin-1 o cp1252
+with open("datos.txt", "r", encoding="latin-1") as f:
+    contenido = f.read()
+```
+
+---
+
+### Recomendaciones para rutas de archivos
+
+```python
+from pathlib import Path
+
+# ✅ Construí rutas con pathlib — portable entre sistemas operativos
+BASE = Path(__file__).parent
+archivo = BASE / "datos" / "entrada.txt"
+
+# ❌ Concatenación manual de rutas — frágil y no portable
+archivo = "C:\\Users\\usuario\\datos\\entrada.txt"   # solo funciona en Windows
+archivo = "/home/usuario/datos/entrada.txt"          # solo funciona en Unix
+```
+
+`pathlib.Path` maneja las diferencias entre `\` (Windows) y `/` (Unix) automáticamente. El operador `/` entre objetos `Path` construye rutas de forma segura en cualquier sistema.
+
+---
+
+## 14. JSON
+
+### Datos estructurados
+
+Cuando los datos tienen estructura — objetos con campos, listas anidadas, relaciones — un archivo de texto plano no alcanza. Necesitás un formato que preserve esa estructura.
+
+**JSON** (JavaScript Object Notation) es el formato estándar para datos estructurados en texto. Es legible por humanos, portable entre lenguajes, y el más usado para APIs, configuración, e intercambio de datos.
+
+```json
+{
+    "nombre": "Ana",
+    "edad": 30,
+    "activa": true,
+    "lenguajes": ["Python", "JavaScript"],
+    "direccion": {
+        "ciudad": "Buenos Aires",
+        "pais": "Argentina"
+    }
+}
+```
+
+---
+
+### JSON en Python
+
+El módulo `json` de la librería estándar convierte entre objetos Python y texto JSON:
+
+| Operación            | Función         | Descripción                              |
+| -------------------- | --------------- | ---------------------------------------- |
+| Python → JSON string | `json.dumps()`  | Serializa un objeto a string JSON        |
+| JSON string → Python | `json.loads()`  | Deserializa un string JSON a objeto      |
+| Python → archivo JSON| `json.dump()`   | Escribe un objeto como JSON en un archivo|
+| archivo JSON → Python| `json.load()`   | Lee un archivo JSON y lo convierte       |
+
+La regla mnemotécnica: con **s** (`dumps`, `loads`) trabajás con **strings**. Sin **s** (`dump`, `load`) trabajás con **archivos**.
+
+---
+
+### Funciones clave
+
+**Escribir JSON a un archivo:**
+
+```python
+import json
+
+datos = {
+    "nombre": "Ana",
+    "edad": 30,
+    "lenguajes": ["Python", "JavaScript"]
+}
+
+with open("datos.json", "w", encoding="utf-8") as f:
+    json.dump(datos, f, ensure_ascii=False, indent=4)
+```
+
+- `ensure_ascii=False` — permite caracteres no ASCII (ñ, á, é...) sin escaparlos
+- `indent=4` — formato legible con indentación de 4 espacios; sin esto, el JSON queda en una sola línea
+
+**Leer JSON desde un archivo:**
+
+```python
+import json
+
+with open("datos.json", "r", encoding="utf-8") as f:
+    datos = json.load(f)
+
+print(datos["nombre"])      # "Ana"
+print(datos["lenguajes"])   # ["Python", "JavaScript"]
+```
+
+**Convertir entre string y objeto:**
+
+```python
+import json
+
+# Python → string JSON
+objeto = {"clave": "valor", "numero": 42}
+texto = json.dumps(objeto)
+print(texto)   # '{"clave": "valor", "numero": 42}'
+
+# String JSON → Python
+texto = '{"nombre": "Luis", "edad": 25}'
+objeto = json.loads(texto)
+print(objeto["nombre"])   # "Luis"
+```
+
+**Equivalencias de tipos:**
+
+| Python        | JSON      |
+| ------------- | --------- |
+| `dict`        | `object`  |
+| `list`        | `array`   |
+| `str`         | `string`  |
+| `int`, `float`| `number`  |
+| `True`        | `true`    |
+| `False`       | `false`   |
+| `None`        | `null`    |
+
+---
+
+### Manejo de tipos no serializables
+
+`json.dump()` solo puede serializar los tipos de la tabla anterior. Si intentás serializar un `datetime`, un `set`, o cualquier objeto personalizado, lanza `TypeError`:
+
+```python
+from datetime import datetime
+import json
+
+datos = {"fecha": datetime.now()}
+json.dumps(datos)   # 💥 TypeError: Object of type datetime is not JSON serializable
+```
+
+La solución es convertir el tipo no serializable antes de serializar, o usar el parámetro `default`:
+
+```python
+import json
+from datetime import datetime
+
+def serializar(obj):
+    if isinstance(obj, datetime):
+        return obj.isoformat()    # "2024-03-15T10:30:00"
+    raise TypeError(f"Tipo no serializable: {type(obj)}")
+
+datos = {"fecha": datetime.now(), "valor": 42}
+texto = json.dumps(datos, default=serializar, ensure_ascii=False, indent=2)
+```
+
+Para `set`, la conversión más simple es pasarlo a `list` antes:
+
+```python
+datos = {"etiquetas": list({"python", "web", "api"})}
+json.dumps(datos)   # ✅ funciona
+```
+
+---
+
+### Errores comunes y encoding
+
+```python
+# JSONDecodeError — el string no es JSON válido
+import json
+
+json.loads("{'clave': 'valor'}")    # 💥 JSONDecodeError — las claves deben ir con comillas dobles
+json.loads('{"clave": "valor"}')    # ✅
+
+# UnicodeDecodeError al leer — falta el encoding
+with open("datos.json", "r") as f:          # ❌ puede fallar con caracteres especiales
+    datos = json.load(f)
+
+with open("datos.json", "r", encoding="utf-8") as f:   # ✅
+    datos = json.load(f)
+
+# Caracteres escapados — sin ensure_ascii=False
+json.dumps({"nombre": "José"})                          # '{"nombre": "Jos\\u00e9"}' — feo
+json.dumps({"nombre": "José"}, ensure_ascii=False)      # '{"nombre": "José"}' — legible
+```
+
+---
+
+## 15. CSV
+
+### Datos tabulares
+
+Cuando los datos tienen forma de tabla — filas y columnas — el formato natural es **CSV** (Comma-Separated Values). Es el formato de exportación universal de hojas de cálculo y bases de datos.
+
+```
+nombre,edad,ciudad
+Ana,30,Buenos Aires
+Luis,25,Córdoba
+Eva,28,Rosario
+```
+
+A diferencia de JSON, CSV no tiene jerarquías ni tipos — todo es texto. La estructura es plana: una fila es un registro, una columna es un campo.
+
+---
+
+### Entendiendo el formato CSV y el módulo `csv`
+
+Python incluye el módulo `csv` en la librería estándar. No usés `open()` y `split(",")` a mano — el módulo maneja correctamente los casos que `split` rompe:
+
+```python
+# ❌ split manual — rompe cuando hay comas dentro de un campo
+linea = 'Ana,"Buenos Aires, Argentina",30'
+linea.split(",")   # ['Ana', '"Buenos Aires', ' Argentina"', '30'] — incorrecto
+
+# ✅ El módulo csv maneja esto correctamente
+import csv
+```
+
+Los campos con comas, saltos de línea o comillas adentro se encierran entre comillas dobles — el módulo `csv` lo maneja automáticamente.
+
+---
+
+### Lectura de archivos CSV
+
+**Con `csv.reader`** — acceso por índice de columna:
+
+```python
+import csv
+
+with open("datos.csv", "r", encoding="utf-8", newline="") as f:
+    lector = csv.reader(f)
+    encabezado = next(lector)    # lee la primera fila (encabezados)
+    for fila in lector:
+        print(fila[0], fila[1])  # acceso por índice
+```
+
+**Con `csv.DictReader`** — acceso por nombre de columna (más legible):
+
+```python
+import csv
+
+with open("datos.csv", "r", encoding="utf-8", newline="") as f:
+    lector = csv.DictReader(f)
+    for fila in lector:
+        print(fila["nombre"], fila["edad"])   # acceso por clave
+```
+
+`DictReader` usa la primera fila como nombres de columna automáticamente. Es la opción preferida cuando el CSV tiene encabezados.
+
+El parámetro `newline=""` es necesario para que el módulo `csv` controle los saltos de línea correctamente — sin él, puede duplicar líneas en blanco en Windows.
+
+---
+
+### Escritura de archivos CSV
+
+**Con `csv.writer`:**
+
+```python
+import csv
+
+filas = [
+    ["nombre", "edad", "ciudad"],
+    ["Ana", 30, "Buenos Aires"],
+    ["Luis", 25, "Córdoba"],
+]
+
+with open("salida.csv", "w", encoding="utf-8", newline="") as f:
+    escritor = csv.writer(f)
+    escritor.writerow(["nombre", "edad", "ciudad"])   # encabezado
+    escritor.writerow(["Ana", 30, "Buenos Aires"])    # una fila
+    escritor.writerows(filas[1:])                     # varias filas de una vez
+```
+
+**Con `csv.DictWriter`** — escribís con nombres de columna:
+
+```python
+import csv
+
+personas = [
+    {"nombre": "Ana", "edad": 30, "ciudad": "Buenos Aires"},
+    {"nombre": "Luis", "edad": 25, "ciudad": "Córdoba"},
+]
+
+campos = ["nombre", "edad", "ciudad"]
+
+with open("salida.csv", "w", encoding="utf-8", newline="") as f:
+    escritor = csv.DictWriter(f, fieldnames=campos)
+    escritor.writeheader()       # escribe la fila de encabezados
+    escritor.writerows(personas) # escribe todas las filas
+```
+
+---
+
+### Delimitadores y filas incompletas
+
+No todos los CSV usan coma como separador. Excel en español usa `;`, otros sistemas usan `\t` (TSV). El módulo `csv` lo maneja con el parámetro `delimiter`:
+
+```python
+import csv
+
+# CSV con punto y coma (común en Excel en español)
+with open("datos.csv", "r", encoding="utf-8", newline="") as f:
+    lector = csv.reader(f, delimiter=";")
+    for fila in lector:
+        print(fila)
+
+# TSV — separado por tabs
+with open("datos.tsv", "r", encoding="utf-8", newline="") as f:
+    lector = csv.reader(f, delimiter="\t")
+    for fila in lector:
+        print(fila)
+```
+
+**Filas incompletas** — cuando una fila tiene menos columnas de las esperadas:
+
+```python
+import csv
+
+with open("datos.csv", "r", encoding="utf-8", newline="") as f:
+    lector = csv.DictReader(f, restval="")   # restval completa campos faltantes con ""
+    for fila in lector:
+        print(fila)
+```
+
+Sin `restval`, una fila incompleta hace que el campo faltante directamente no exista en el dict, lo que puede causar un `KeyError` al intentar accederlo.
