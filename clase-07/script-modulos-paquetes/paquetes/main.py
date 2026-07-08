@@ -1,12 +1,11 @@
+from calculadora.resta import restar
 from calculadora import *
-from funciones_validar import validar_numero
 
 resultado = sumar(4, 5)
-print(f"La suma es: {resultado}")
+print(f"El resultado de la suma es: {resultado}")
 
-resultado = restar(4, 5)
-print(f"La resta es: {resultado}")
+resultado_resta = restar(10, 4)
+print(f"El resultado de la resta es: {resultado_resta}")
 
 calc = Calculadora(5, 5)
-print(calc)
-calc.sumar()
+print(calc.sumar())

@@ -1,18 +1,10 @@
-from ope import sumar, restar # Path Absolutos.
-#from cosas.mate import multiplicar # Path Relativos.
-from cosas.test import multiplicar
+from ope import sumar, restar  # importa las funciones sumar y restar del modulo ope.py
 import random
 import os
 import time
 
+resultado = sumar(5, 3)
+print(f"El resultado de la suma es: {resultado}")
 
-resultado = sumar(4, 10)
-print(f"La suma es: {resultado}")
-
-resultado = restar(4, 5)
-print(f"La resta es: {resultado}")
-
-resultado = multiplicar(2, 5)
-print(f"La multiplicacion es {resultado}")
-
-print(random.choices([1, 2, 3, 4, 5]))
+resultado_resta = restar(10, 4)
+print(f"El resultado de la resta es: {resultado_resta}")

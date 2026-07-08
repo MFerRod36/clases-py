@@ -1,2 +1,2 @@
-from .resta import *
-from .suma import sumar
+from calculadora.resta import *
+from .suma import *

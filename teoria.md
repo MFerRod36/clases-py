@@ -2145,10 +2145,10 @@ La función `main()` no es obligatoria por el lenguaje — es una **convención*
 
 Cada archivo Python tiene una variable especial llamada `__name__`. Su valor cambia dependiendo de cómo se usa el archivo:
 
-| Situación                              | Valor de `__name__`  |
-| -------------------------------------- | -------------------- |
-| El archivo se ejecuta directamente     | `"__main__"`         |
-| El archivo es importado por otro       | El nombre del módulo |
+| Situación                          | Valor de `__name__`  |
+| ---------------------------------- | -------------------- |
+| El archivo se ejecuta directamente | `"__main__"`         |
+| El archivo es importado por otro   | El nombre del módulo |
 
 Esto permite que un mismo archivo funcione como script ejecutable **y** como módulo importable, sin ejecutar código de más:
 
@@ -2275,7 +2275,7 @@ if __name__ == "__main__":
     print(resultado)
 ```
 
-**Regla simple:** en un módulo, el nivel raíz solo debe tener definiciones (funciones, clases, constantes). Todo lo que *hace* algo va adentro de `if __name__ == "__main__"` o dentro de funciones.
+**Regla simple:** en un módulo, el nivel raíz solo debe tener definiciones (funciones, clases, constantes). Todo lo que _hace_ algo va adentro de `if __name__ == "__main__"` o dentro de funciones.
 
 ---
 
@@ -2300,8 +2300,8 @@ with open("datos.txt", "r") as archivo:
 
 **Modos de apertura más comunes:**
 
-| Modo  | Descripción                                              |
-| ----- | -------------------------------------------------------- |
+| Modo  | Descripción                                             |
+| ----- | ------------------------------------------------------- |
 | `"r"` | Lectura (por defecto). Falla si el archivo no existe.   |
 | `"w"` | Escritura. Crea el archivo o lo sobreescribe si existe. |
 | `"a"` | Append. Agrega al final sin borrar el contenido previo. |
@@ -2405,7 +2405,7 @@ mi_funcion()
 
 #### ¿Para qué sirve `__init__.py`?
 
-`__init__.py` le dice a Python que esa carpeta es un paquete — sin él, Python no la reconoce como tal (en versiones modernas existe el concepto de *namespace packages* sin `__init__.py`, pero para proyectos normales siempre lo necesitás).
+`__init__.py` le dice a Python que esa carpeta es un paquete — sin él, Python no la reconoce como tal (en versiones modernas existe el concepto de _namespace packages_ sin `__init__.py`, pero para proyectos normales siempre lo necesitás).
 
 Puede estar **vacío** — solo para marcar la carpeta — o puede tener código que se ejecuta al importar el paquete:
 
@@ -2569,13 +2569,13 @@ El mecanismo más simple es escribir a un archivo. No necesitás ninguna depende
 
 Todo archivo en disco es una secuencia de bytes. La diferencia está en cómo los interpretás:
 
-| Característica      | Archivo de texto                          | Archivo binario                        |
-| ------------------- | ----------------------------------------- | -------------------------------------- |
-| Contenido           | Bytes que representan caracteres (UTF-8)  | Bytes con cualquier significado        |
-| Legible por humanos | Sí — abrís con un editor y lo entendés   | No — necesitás el programa correcto    |
-| Ejemplos            | `.txt`, `.py`, `.csv`, `.json`, `.html`   | `.png`, `.mp3`, `.pdf`, `.exe`, `.db`  |
-| Modo en Python      | `"r"`, `"w"`, `"a"`                       | `"rb"`, `"wb"`, `"ab"`                |
-| Saltos de línea     | Python convierte `\n` según el SO        | Sin conversión — bytes exactos         |
+| Característica      | Archivo de texto                         | Archivo binario                       |
+| ------------------- | ---------------------------------------- | ------------------------------------- |
+| Contenido           | Bytes que representan caracteres (UTF-8) | Bytes con cualquier significado       |
+| Legible por humanos | Sí — abrís con un editor y lo entendés   | No — necesitás el programa correcto   |
+| Ejemplos            | `.txt`, `.py`, `.csv`, `.json`, `.html`  | `.png`, `.mp3`, `.pdf`, `.exe`, `.db` |
+| Modo en Python      | `"r"`, `"w"`, `"a"`                      | `"rb"`, `"wb"`, `"ab"`                |
+| Saltos de línea     | Python convierte `\n` según el SO        | Sin conversión — bytes exactos        |
 
 Para texto, Python hace una traducción automática de saltos de línea: en Windows `\r\n` se convierte a `\n` al leer, y `\n` se convierte a `\r\n` al escribir. En modo binario, los bytes llegan exactos — sin ninguna transformación.
 
@@ -2621,15 +2621,15 @@ with open("datos.txt", "r") as f:
 open(archivo, modo, encoding)
 ```
 
-| Modo   | Acción                                                                 |
-| ------ | ---------------------------------------------------------------------- |
-| `"r"`  | Lectura. Falla con `FileNotFoundError` si el archivo no existe.       |
-| `"w"`  | Escritura. Crea el archivo si no existe. **Sobreescribe** si existe.  |
-| `"a"`  | Append. Agrega al final. Crea el archivo si no existe.                |
-| `"x"`  | Creación exclusiva. Falla con `FileExistsError` si ya existe.         |
-| `"r+"` | Lectura y escritura. El archivo debe existir.                         |
-| `"rb"` | Lectura binaria.                                                       |
-| `"wb"` | Escritura binaria.                                                     |
+| Modo   | Acción                                                               |
+| ------ | -------------------------------------------------------------------- |
+| `"r"`  | Lectura. Falla con `FileNotFoundError` si el archivo no existe.      |
+| `"w"`  | Escritura. Crea el archivo si no existe. **Sobreescribe** si existe. |
+| `"a"`  | Append. Agrega al final. Crea el archivo si no existe.               |
+| `"x"`  | Creación exclusiva. Falla con `FileExistsError` si ya existe.        |
+| `"r+"` | Lectura y escritura. El archivo debe existir.                        |
+| `"rb"` | Lectura binaria.                                                     |
+| `"wb"` | Escritura binaria.                                                   |
 
 El modo `"w"` es destructivo — sobreescribe sin aviso. Si necesitás preservar el contenido existente, usá `"a"`.
 
@@ -2648,7 +2648,7 @@ open("datos.txt", "r")           # busca en el directorio actual
 open("datos/notas.txt", "r")     # busca en la subcarpeta datos/
 ```
 
-El problema con las rutas relativas es que dependen de *dónde* ejecutás el script, no de *dónde está* el script. Si ejecutás desde otra carpeta, la ruta no apunta donde esperás.
+El problema con las rutas relativas es que dependen de _dónde_ ejecutás el script, no de _dónde está_ el script. Si ejecutás desde otra carpeta, la ruta no apunta donde esperás.
 
 La solución correcta es construir la ruta relativa al script usando `__file__`:
 
@@ -2712,8 +2712,8 @@ with open("datos.txt", "r", encoding="utf-8") as f:
 | Método        | Cuándo usarlo                                              |
 | ------------- | ---------------------------------------------------------- |
 | `read()`      | Archivos chicos donde necesitás todo el contenido a la vez |
-| `readlines()` | Cuando necesitás la lista completa de líneas en memoria   |
-| `readline()`  | Procesamiento manual línea por línea con control preciso  |
+| `readlines()` | Cuando necesitás la lista completa de líneas en memoria    |
+| `readline()`  | Procesamiento manual línea por línea con control preciso   |
 | `for linea`   | Archivos grandes — es la opción más eficiente              |
 
 ---
@@ -2790,14 +2790,14 @@ Cuando los datos tienen estructura — objetos con campos, listas anidadas, rela
 
 ```json
 {
-    "nombre": "Ana",
-    "edad": 30,
-    "activa": true,
-    "lenguajes": ["Python", "JavaScript"],
-    "direccion": {
-        "ciudad": "Buenos Aires",
-        "pais": "Argentina"
-    }
+  "nombre": "Ana",
+  "edad": 30,
+  "activa": true,
+  "lenguajes": ["Python", "JavaScript"],
+  "direccion": {
+    "ciudad": "Buenos Aires",
+    "pais": "Argentina"
+  }
 }
 ```
 
@@ -2807,12 +2807,12 @@ Cuando los datos tienen estructura — objetos con campos, listas anidadas, rela
 
 El módulo `json` de la librería estándar convierte entre objetos Python y texto JSON:
 
-| Operación            | Función         | Descripción                              |
-| -------------------- | --------------- | ---------------------------------------- |
-| Python → JSON string | `json.dumps()`  | Serializa un objeto a string JSON        |
-| JSON string → Python | `json.loads()`  | Deserializa un string JSON a objeto      |
-| Python → archivo JSON| `json.dump()`   | Escribe un objeto como JSON en un archivo|
-| archivo JSON → Python| `json.load()`   | Lee un archivo JSON y lo convierte       |
+| Operación             | Función        | Descripción                               |
+| --------------------- | -------------- | ----------------------------------------- |
+| Python → JSON string  | `json.dumps()` | Serializa un objeto a string JSON         |
+| JSON string → Python  | `json.loads()` | Deserializa un string JSON a objeto       |
+| Python → archivo JSON | `json.dump()`  | Escribe un objeto como JSON en un archivo |
+| archivo JSON → Python | `json.load()`  | Lee un archivo JSON y lo convierte        |
 
 La regla mnemotécnica: con **s** (`dumps`, `loads`) trabajás con **strings**. Sin **s** (`dump`, `load`) trabajás con **archivos**.
 
@@ -2868,15 +2868,15 @@ print(objeto["nombre"])   # "Luis"
 
 **Equivalencias de tipos:**
 
-| Python        | JSON      |
-| ------------- | --------- |
-| `dict`        | `object`  |
-| `list`        | `array`   |
-| `str`         | `string`  |
-| `int`, `float`| `number`  |
-| `True`        | `true`    |
-| `False`       | `false`   |
-| `None`        | `null`    |
+| Python         | JSON     |
+| -------------- | -------- |
+| `dict`         | `object` |
+| `list`         | `array`  |
+| `str`          | `string` |
+| `int`, `float` | `number` |
+| `True`         | `true`   |
+| `False`        | `false`  |
+| `None`         | `null`   |
 
 ---
 
@@ -3076,3 +3076,1604 @@ with open("datos.csv", "r", encoding="utf-8", newline="") as f:
 ```
 
 Sin `restval`, una fila incompleta hace que el campo faltante directamente no exista en el dict, lo que puede causar un `KeyError` al intentar accederlo.
+
+---
+
+## 16. Entornos Virtuales y Gestión de Dependencias
+
+### El problema que resuelven
+
+Imaginá que tenés dos proyectos. El primero usa Django 4.2. El segundo necesita Django 3.2 porque depende de una librería que todavía no fue actualizada. Si instalás todo globalmente, uno de los dos va a romperse.
+
+Un **entorno virtual** es un directorio aislado que tiene su propia copia de Python y sus propios paquetes instalados. Lo que instalás adentro no afecta al sistema ni a otros proyectos.
+
+```
+mi_proyecto/
+├── venv/          ← entorno virtual (no se commitea)
+├── app/
+└── requirements.txt
+```
+
+---
+
+### Crear y activar un entorno virtual
+
+```bash
+# Crear
+python -m venv venv
+
+# Activar — Windows (PowerShell)
+venv\Scripts\activate
+
+# Activar — Windows (bash / Git Bash)
+source venv/Scripts/activate
+
+# Activar — Linux / macOS
+source venv/bin/activate
+
+# Desactivar (en cualquier sistema)
+deactivate
+```
+
+Cuando el entorno está activo, el prompt muestra `(venv)` al inicio. Todo `pip install` que hagas desde ese momento va al entorno, no al sistema.
+
+---
+
+### Instalar y gestionar paquetes con pip
+
+```bash
+pip install django              # instala la última versión
+pip install django==4.2.7       # versión exacta
+pip install "django>=4.0,<5.0"  # rango de versiones
+pip uninstall django
+pip list                        # paquetes instalados en el entorno activo
+pip show django                 # info de un paquete específico
+```
+
+---
+
+### `requirements.txt` — el contrato de dependencias
+
+El archivo `requirements.txt` es la lista de paquetes que necesita tu proyecto para funcionar. Es lo que le vas a dar a cualquier otra persona (o servidor) para que replique tu entorno exacto.
+
+```bash
+# Generar desde el entorno activo
+pip freeze > requirements.txt
+
+# Instalar desde el archivo
+pip install -r requirements.txt
+```
+
+El archivo se ve así:
+
+```
+Django==4.2.7
+Pillow==10.1.0
+python-decouple==3.8
+```
+
+**Por qué `pip freeze` y no escribirlo a mano:** `freeze` captura también las dependencias transitivas — los paquetes que instalaron tus paquetes. Eso garantiza reproducibilidad total.
+
+**Por qué `venv/` va en `.gitignore`:** El entorno virtual pesa cientos de MB, es específico del sistema operativo, y se puede regenerar en segundos con `pip install -r requirements.txt`. Commitear el `venv/` sería commitear basura binaria que no aporta nada.
+
+---
+
+## 17. Django — Patrón MVT y Ciclo de Petición
+
+### Qué es Django
+
+Django es un framework web de Python orientado a la productividad. Su lema es _"batteries included"_: trae ORM, autenticación, administrador automático, formularios, migraciones y más — todo integrado y listo para usar.
+
+Se usa para construir aplicaciones web que requieren base de datos, lógica de negocio y HTML renderizado del lado del servidor.
+
+---
+
+### MVT vs MVC
+
+Django sigue el patrón **MVT** (Model - View - Template), casi idéntico al MVC clásico pero con nombres distintos:
+
+| MVC clásico | Django MVT | Responsabilidad                                                           |
+| ----------- | ---------- | ------------------------------------------------------------------------- |
+| Model       | Model      | Datos y reglas de negocio. Habla con la base de datos.                    |
+| Controller  | View       | Lógica de la petición. Decide qué datos buscar y qué template renderizar. |
+| View        | Template   | Presentación. El HTML que ve el usuario.                                  |
+
+La confusión habitual: en Django, la **View** es lo que en MVC sería el Controller. El nombre viene de "qué se ve" — la View decide _qué datos mostrar_, no _cómo mostrarlos_.
+
+---
+
+### El rol de cada capa
+
+| Capa         | Debe hacer                                                             | No debe hacer                         |
+| ------------ | ---------------------------------------------------------------------- | ------------------------------------- |
+| **Model**    | Representar datos, reglas de negocio, consultas a la DB                | Lógica de presentación, lógica HTTP   |
+| **View**     | Recibir el request, decidir qué datos buscar, retornar una response    | Generar HTML, definir estructura DB   |
+| **Template** | Presentar datos en HTML                                                | Hacer consultas, lógica de negocio    |
+
+---
+
+### El ciclo completo de una petición
+
+```
+1. Usuario escribe una URL o hace click en un link
+         ↓
+2. Django recorre el middleware de entrada (seguridad, sesiones, auth...)
+         ↓
+3. El URLconf (urls.py) encuentra la primera coincidencia con la URL
+         ↓
+4. Django llama a la View asociada, pasándole el objeto request
+         ↓
+5. La View ejecuta lógica: consulta Models, procesa datos, arma el contexto
+         ↓
+6. La View llama a render() con el template y el contexto
+         ↓
+7. El motor de templates procesa tags/variables y genera el HTML final
+         ↓
+8. Django recorre el middleware de salida
+         ↓
+9. Django devuelve el HttpResponse con el HTML al navegador
+```
+
+Cada request es **stateless** — Django no recuerda el request anterior. La sesión (guardada en la base de datos) es el mecanismo para simular estado entre requests.
+
+---
+
+### Middleware
+
+El **middleware** envuelve cada request y response como una cadena de procesamiento:
+
+```python
+# settings.py
+MIDDLEWARE = [
+    'django.middleware.security.SecurityMiddleware',
+    'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.middleware.common.CommonMiddleware',
+    'django.middleware.csrf.CsrfViewMiddleware',               # valida {% csrf_token %}
+    'django.contrib.auth.middleware.AuthenticationMiddleware', # pone request.user
+    'django.contrib.messages.middleware.MessageMiddleware',
+    'django.middleware.clickjacking.XFrameOptionsMiddleware',
+]
+```
+
+El orden importa: se ejecuta de arriba a abajo en el request y de abajo a arriba en la response.
+
+---
+
+### El objeto `request`
+
+La View recibe un `HttpRequest` con toda la información de la petición:
+
+```python
+def mi_vista(request):
+    request.method          # 'GET', 'POST', 'PUT', 'DELETE'
+    request.GET             # QueryDict con parámetros de la URL (?q=algo)
+    request.POST            # QueryDict con datos del formulario
+    request.FILES           # archivos subidos
+    request.user            # usuario actual (autenticado o AnonymousUser)
+    request.session         # diccionario de sesión persistente
+    request.path            # '/blog/posts/1/'
+    request.META            # headers HTTP y metadatos del servidor
+    request.is_secure()     # True si es HTTPS
+```
+
+---
+
+### Proyecto vs Aplicación
+
+**Proyecto** (`startproject`): el contenedor global. Tiene la configuración general — base de datos, idioma, apps instaladas, middleware. Solo hay uno por sitio web.
+
+**Aplicación** (`startapp`): una unidad funcional dentro del proyecto. Un blog, una tienda, un sistema de usuarios. Un proyecto puede tener muchas apps. Las apps son reutilizables — podés llevarlas de un proyecto a otro.
+
+Analogía: el **proyecto** es el edificio. Las **apps** son los departamentos.
+
+---
+
+## 18. Estructura de Proyecto y Configuración
+
+### Setup inicial
+
+```bash
+# Con el entorno virtual activo
+pip install django
+python -m django --version        # verificar instalación
+
+# Crear el proyecto (el punto evita carpeta extra)
+django-admin startproject mi_sitio .
+
+# Crear la aplicación
+python manage.py startapp blog
+
+# Verificar que funciona
+python manage.py runserver        # → http://127.0.0.1:8000/
+```
+
+Después de crear la app, registrarla en `settings.py`:
+
+```python
+INSTALLED_APPS = [
+    # apps de Django...
+    'blog',   # ← agregar acá
+]
+```
+
+Si no la registrás, Django no la conoce: no procesa sus modelos, no la incluye en migraciones, no encuentra sus templates.
+
+---
+
+### Estructura del proyecto
+
+```
+mi_sitio/
+├── manage.py                    ← CLI del proyecto
+├── mi_sitio/                    ← paquete de configuración
+│   ├── settings.py              ← configuración global
+│   ├── urls.py                  ← URLconf raíz
+│   ├── asgi.py
+│   └── wsgi.py
+│
+├── blog/                        ← tu aplicación
+│   ├── migrations/              ← historial de cambios en la DB
+│   ├── templates/
+│   │   └── blog/                ← namespace para evitar colisiones
+│   │       └── lista.html
+│   ├── static/
+│   │   └── blog/
+│   │       └── css/
+│   ├── admin.py
+│   ├── apps.py
+│   ├── forms.py
+│   ├── models.py
+│   ├── urls.py
+│   └── views.py
+│
+└── templates/                   ← templates globales (base, login...)
+```
+
+---
+
+### Archivos clave
+
+| Archivo              | Responsabilidad                                                   |
+| -------------------- | ----------------------------------------------------------------- |
+| `manage.py`          | CLI — `runserver`, `migrate`, `startapp`, `createsuperuser`, etc. |
+| `settings.py`        | Configuración central: DB, apps, middleware, idioma, etc.         |
+| `urls.py` (proyecto) | URLconf raíz — delega a las apps con `include()`                  |
+| `urls.py` (app)      | URLconf de la app — define sus propias rutas                      |
+| `models.py`          | Definición de tablas y lógica de datos                            |
+| `views.py`           | Lógica de cada petición HTTP                                      |
+| `admin.py`           | Registro de modelos en el panel de administración                 |
+| `migrations/`        | Historial de cambios en la base de datos (se commitea)            |
+
+---
+
+### Configuración clave en `settings.py`
+
+```python
+SECRET_KEY = 'django-insecure-...'   # nunca exponerla en producción
+
+DEBUG = True           # False en producción SIEMPRE
+ALLOWED_HOSTS = []     # en producción: ['midominio.com']
+
+INSTALLED_APPS = [
+    'django.contrib.admin',
+    'django.contrib.auth',
+    'django.contrib.contenttypes',
+    'django.contrib.sessions',
+    'django.contrib.messages',
+    'django.contrib.staticfiles',
+    'blog',
+]
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
+    }
+}
+
+LANGUAGE_CODE = 'es-ar'
+TIME_ZONE = 'America/Argentina/Buenos_Aires'
+USE_TZ = True                 # datetimes con timezone — siempre True
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+```
+
+SQLite es perfecta para desarrollo: no necesita servidor ni usuario/contraseña. Para producción usás PostgreSQL — el cambio es solo editar `DATABASES`.
+
+Después de configurar, ejecutar las migraciones iniciales:
+
+```bash
+python manage.py migrate   # crea las tablas de admin, auth, sessions, etc.
+```
+
+---
+
+### Archivos estáticos y templates
+
+```python
+# settings.py
+
+TEMPLATES = [{
+    'BACKEND': 'django.template.backends.django.DjangoTemplates',
+    'DIRS': [BASE_DIR / 'templates'],   # templates globales del proyecto
+    'APP_DIRS': True,                   # busca templates/ dentro de cada app
+    'OPTIONS': {'context_processors': [
+        'django.template.context_processors.debug',
+        'django.template.context_processors.request',
+        'django.contrib.auth.context_processors.auth',
+        'django.contrib.messages.context_processors.messages',
+    ]},
+}]
+
+STATIC_URL = '/static/'
+STATICFILES_DIRS = [BASE_DIR / 'static']   # estáticos globales del proyecto
+STATIC_ROOT = BASE_DIR / 'staticfiles'     # destino de collectstatic (producción)
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media'            # archivos subidos por usuarios
+```
+
+En los templates, los estáticos se referencian así:
+
+```html
+{% load static %}
+<link rel="stylesheet" href="{% static 'blog/css/estilos.css' %}">
+```
+
+En desarrollo Django los sirve automáticamente. En producción ejecutás `python manage.py collectstatic` y los servís con Nginx o un CDN.
+
+---
+
+### Buenas prácticas para settings y despliegue
+
+Nunca pongas secretos en el código fuente. Usá variables de entorno:
+
+```bash
+# .env — NO se commitea (en .gitignore)
+SECRET_KEY=mi-clave-secreta-de-produccion
+DEBUG=False
+ALLOWED_HOSTS=midominio.com,www.midominio.com
+```
+
+```python
+# settings.py
+import os
+
+SECRET_KEY = os.environ.get('SECRET_KEY', 'clave-local-solo-para-dev')
+DEBUG = os.environ.get('DEBUG', 'True') == 'True'
+ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', 'localhost').split(',')
+```
+
+O con `python-decouple` (más limpio):
+
+```python
+from decouple import config
+
+SECRET_KEY = config('SECRET_KEY')
+DEBUG = config('DEBUG', default=False, cast=bool)
+```
+
+**Checklist mínimo antes de desplegar:**
+
+```
+☐ DEBUG = False
+☐ SECRET_KEY desde variable de entorno
+☐ ALLOWED_HOSTS con el dominio real
+☐ Base de datos de producción configurada
+☐ collectstatic ejecutado
+☐ HTTPS configurado en el servidor web
+☐ venv/ y .env en .gitignore
+```
+
+---
+
+## 19. Templates y Sistema de Plantillas
+
+### Por qué separar la presentación de la lógica
+
+El HTML mezclado con Python en la vista no escala: un diseñador no puede tocar el HTML sin entrar al código Python, y cualquier cambio de presentación requiere modificar lógica. La solución es la **separación de responsabilidades**: la vista decide _qué datos mostrar_, el template decide _cómo mostrarlos_.
+
+---
+
+### Configurar y renderizar templates
+
+La convención es namespacing — una carpeta extra con el nombre de la app para evitar colisiones entre apps:
+
+```
+blog/templates/blog/lista.html   ← se referencia como 'blog/lista.html'
+```
+
+```python
+# blog/views.py
+from django.shortcuts import render
+
+def inicio(request):
+    contexto = {
+        'titulo': 'Mi Blog',
+        'posts': ['Post 1', 'Post 2'],
+    }
+    return render(request, 'blog/inicio.html', contexto)
+```
+
+`render()` combina cargar el template, pasarle el contexto y devolver un `HttpResponse`. El **contexto** es el diccionario cuyas claves se convierten en variables dentro del template.
+
+---
+
+### Django Template Language (DTL)
+
+**Variables:**
+
+```html
+{{ variable }}
+{{ objeto.atributo }}
+{{ lista.0 }}             <!-- primer elemento -->
+```
+
+**Tags — lógica de control:**
+
+```html
+{% if usuario.is_authenticated %}
+  <p>Hola, {{ usuario.username }}</p>
+{% elif usuario.is_staff %}
+  <p>Admin</p>
+{% else %}
+  <p>Visitante</p>
+{% endif %}
+
+{% for post in posts %}
+  <p>{{ forloop.counter }}. {{ post.titulo }}</p>
+{% empty %}
+  <p>No hay posts.</p>
+{% endfor %}
+
+{% with total=posts|length %}
+  <p>Total: {{ total }}</p>
+{% endwith %}
+```
+
+Variables especiales en `{% for %}`: `forloop.counter` (desde 1), `forloop.counter0` (desde 0), `forloop.first`, `forloop.last`.
+
+**Filtros — transforman variables antes de mostrarlas:**
+
+```html
+{{ nombre|upper }}                 <!-- MAYÚSCULAS -->
+{{ nombre|lower }}                 <!-- minúsculas -->
+{{ nombre|title }}                 <!-- Cada Palabra Con Mayúscula -->
+{{ texto|truncatewords:30 }}       <!-- primeras 30 palabras -->
+{{ texto|truncatechars:100 }}      <!-- primeros 100 caracteres -->
+{{ precio|floatformat:2 }}         <!-- 2 decimales -->
+{{ fecha|date:"d/m/Y" }}           <!-- 25/06/2025 -->
+{{ fecha|timesince }}              <!-- "3 días atrás" -->
+{{ lista|length }}                 <!-- cantidad de elementos -->
+{{ valor|default:"Sin datos" }}    <!-- valor por defecto si es falsy -->
+{{ html|safe }}                    <!-- renderiza HTML sin escapar (¡con cuidado!) -->
+{{ lista|join:", " }}              <!-- une con separador -->
+{{ texto|linebreaks }}             <!-- convierte \n en <br> y <p> -->
+```
+
+Los filtros se encadenan: `{{ nombre|lower|capfirst }}` — primero minúsculas, luego capitaliza la primera.
+
+---
+
+### Herencia de templates
+
+Repetir `<head>`, navbar y footer en cada template es la peor forma de trabajar. La herencia resuelve esto definiendo un template **base** con la estructura común:
+
+```html
+<!-- blog/templates/blog/base.html -->
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>{% block titulo %}Mi Sitio{% endblock %}</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'blog/css/estilos.css' %}">
+  </head>
+  <body>
+    <nav>
+      {% if user.is_authenticated %}
+        <a href="{% url 'logout' %}">Salir</a>
+      {% else %}
+        <a href="{% url 'login' %}">Entrar</a>
+      {% endif %}
+    </nav>
+
+    <main>{% block contenido %}{% endblock %}</main>
+
+    <footer><p>© 2025</p></footer>
+  </body>
+</html>
+```
+
+```html
+<!-- blog/templates/blog/inicio.html -->
+{% extends "blog/base.html" %}
+
+{% block titulo %}Inicio — {{ block.super }}{% endblock %}
+
+{% block contenido %}
+<h1>Últimos posts</h1>
+{% for post in posts %}
+  <p>{{ post.titulo }}</p>
+{% endfor %}
+{% endblock %}
+```
+
+`{% extends %}` tiene que ser la **primera línea** del archivo. `{{ block.super }}` incluye el contenido del bloque padre — permite extender en vez de reemplazar.
+
+---
+
+### `include` — reutilizar fragmentos
+
+```html
+{% include "blog/partials/navbar.html" %}
+{% include "blog/partials/tarjeta_post.html" with post=post %}
+```
+
+`include` inserta un fragmento dentro del template actual. `extends` define que el template hereda la estructura de otro. Son complementarios, no alternativos.
+
+---
+
+### Context processors
+
+Un **context processor** agrega variables disponibles en TODOS los templates automáticamente — sin pasarlas en cada `render()`:
+
+```python
+# blog/context_processors.py
+from .models import Categoria
+
+def menu_global(request):
+    return {
+        'nombre_sitio': 'Mi Blog',
+        'categorias_menu': Categoria.objects.all(),
+    }
+```
+
+```python
+# settings.py
+TEMPLATES = [{'OPTIONS': {'context_processors': [
+    # los de Django por defecto...
+    'blog.context_processors.menu_global',
+]}}]
+```
+
+Ahora `{{ nombre_sitio }}` y `{{ categorias_menu }}` están disponibles en cualquier template.
+
+---
+
+## 20. URLs
+
+### Primera vista y primera URL
+
+Una **vista** en Django es una función (o clase) que recibe un `HttpRequest` y devuelve un `HttpResponse`:
+
+```python
+# blog/views.py
+from django.http import HttpResponse
+from django.shortcuts import render
+
+def inicio(request):
+    return HttpResponse("Hola desde Django")
+```
+
+Para que sea accesible, hay que conectarla al sistema de rutas. Cada app tiene su propio `urls.py`:
+
+```python
+# blog/urls.py  (crearlo vos — no existe por defecto)
+from django.urls import path
+from . import views
+
+urlpatterns = [
+    path('', views.inicio, name='inicio'),
+]
+```
+
+Y luego incluirlo en el `urls.py` del proyecto:
+
+```python
+# mi_sitio/urls.py
+from django.contrib import admin
+from django.urls import path, include
+
+urlpatterns = [
+    path('admin/', admin.site.urls),
+    path('blog/', include('blog.urls')),
+]
+```
+
+`include()` delega todo lo que empieza con `"blog/"` al `urls.py` de la app. Cada app maneja sus propias rutas — el proyecto solo las agrupa.
+
+---
+
+### Parámetros en la URL
+
+```python
+# blog/urls.py
+urlpatterns = [
+    path('', views.lista, name='lista'),
+    path('<int:pk>/', views.detalle, name='detalle'),
+    path('<slug:slug>/', views.detalle_slug, name='detalle_slug'),
+    path('categoria/<str:nombre>/', views.por_categoria, name='categoria'),
+]
+```
+
+```python
+def detalle(request, pk):
+    return HttpResponse(f"Post #{pk}")
+```
+
+**Conversores disponibles:**
+
+| Conversor | Qué acepta                           | Tipo Python |
+| --------- | ------------------------------------ | ----------- |
+| `int`     | Dígitos, sin signo                   | `int`       |
+| `str`     | Cualquier string sin `/`             | `str`       |
+| `slug`    | Letras, números, guiones, guion bajo | `str`       |
+| `uuid`    | UUID formateado                      | `UUID`      |
+| `path`    | Cualquier string incluyendo `/`      | `str`       |
+
+Django valida el conversor automáticamente — si la URL tiene letras donde se espera `int`, devuelve 404.
+
+---
+
+### Namespacing de URLs
+
+Cuando varias apps tienen vistas con el mismo nombre (`lista`, `detalle`...), el **namespace** evita colisiones:
+
+```python
+# blog/urls.py
+app_name = 'blog'    # ← define el namespace
+
+urlpatterns = [
+    path('', views.PostListView.as_view(), name='lista'),
+    path('<int:pk>/', views.PostDetailView.as_view(), name='detalle'),
+]
+```
+
+```python
+# En vistas
+from django.urls import reverse
+reverse('blog:lista')
+reverse('blog:detalle', args=[1])
+```
+
+```html
+<!-- En templates -->
+{% url 'blog:lista' %}
+{% url 'blog:detalle' post.pk %}
+```
+
+---
+
+### Conversores personalizados y `re_path`
+
+```python
+# blog/converters.py
+class AñoConverter:
+    regex = r'20[0-9]{2}'    # años 2000-2099
+    def to_python(self, value): return int(value)
+    def to_url(self, value): return str(value)
+
+# blog/urls.py
+from django.urls import register_converter, path
+from . import converters
+
+register_converter(converters.AñoConverter, 'año')
+
+urlpatterns = [
+    path('archivo/<año:año>/', views.por_año, name='por_año'),
+]
+```
+
+Para patrones que `path()` no puede expresar, usás `re_path`:
+
+```python
+from django.urls import re_path
+
+urlpatterns = [
+    re_path(r'^archivo/(?P<año>\d{4})/$', views.por_año, name='por_año'),
+]
+```
+
+Preferí `path()` sobre `re_path()` siempre que sea posible.
+
+---
+
+## 21. Modelos y ORM
+
+### Qué es un modelo
+
+Un **modelo** en Django es una clase Python que representa una tabla en la base de datos. Cada atributo es una columna. Django traduce la clase a SQL automáticamente.
+
+```python
+# blog/models.py
+from django.db import models
+from django.urls import reverse
+
+class Post(models.Model):
+    titulo = models.CharField(max_length=200)
+    contenido = models.TextField()
+    publicado = models.BooleanField(default=False)
+    creado_en = models.DateTimeField(auto_now_add=True)
+    actualizado_en = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ['-creado_en']
+        verbose_name = 'artículo'
+        verbose_name_plural = 'artículos'
+
+    def __str__(self):
+        return self.titulo
+
+    def get_absolute_url(self):
+        return reverse('blog:detalle', kwargs={'pk': self.pk})
+```
+
+Django agrega automáticamente un campo `id` (clave primaria autoincremental) a todo modelo que no defina el suyo.
+
+---
+
+### Tipos de campos más usados
+
+| Campo             | Tipo SQL    | Para qué                                              |
+| ----------------- | ----------- | ----------------------------------------------------- |
+| `CharField`       | VARCHAR     | Texto corto — siempre necesita `max_length`           |
+| `TextField`       | TEXT        | Texto largo sin límite                                |
+| `IntegerField`    | INTEGER     | Número entero                                         |
+| `DecimalField`    | DECIMAL     | Decimal exacto (dinero) — necesita `max_digits` y `decimal_places` |
+| `BooleanField`    | BOOLEAN     | Verdadero/falso                                       |
+| `DateField`       | DATE        | Solo fecha                                            |
+| `DateTimeField`   | DATETIME    | Fecha y hora                                          |
+| `EmailField`      | VARCHAR     | Email con validación incluida                         |
+| `SlugField`       | VARCHAR     | Slug (letras, números, guiones)                       |
+| `URLField`        | VARCHAR     | URL con validación                                    |
+| `ImageField`      | VARCHAR     | Ruta a imagen (requiere Pillow)                       |
+| `ForeignKey`      | INTEGER     | Relación muchos a uno                                 |
+| `ManyToManyField` | tabla extra | Relación muchos a muchos                              |
+| `OneToOneField`   | INTEGER     | Relación uno a uno                                    |
+
+---
+
+### Opciones comunes de los campos
+
+```python
+class Articulo(models.Model):
+    titulo = models.CharField(max_length=200)
+
+    # null → permite NULL en la DB / blank → permite vacío en formularios
+    descripcion = models.TextField(null=True, blank=True)
+
+    activo = models.BooleanField(default=True)
+
+    creado_en = models.DateTimeField(auto_now_add=True)   # solo al crear
+    modificado_en = models.DateTimeField(auto_now=True)   # en cada save
+
+    slug = models.SlugField(unique=True)
+
+    ESTADO_CHOICES = [
+        ('borrador', 'Borrador'),
+        ('publicado', 'Publicado'),
+    ]
+    estado = models.CharField(max_length=20, choices=ESTADO_CHOICES, default='borrador')
+```
+
+`null` y `blank` son distintos: `null` es a nivel de base de datos, `blank` es a nivel de validación de formularios. Para campos de texto, usá `blank=True` en lugar de `null=True` — Django guarda cadena vacía `""` para texto sin valor.
+
+---
+
+### La clase `Meta`
+
+```python
+class Post(models.Model):
+    titulo = models.CharField(max_length=200)
+    creado_en = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['-creado_en']                      # orden por defecto en queries
+        verbose_name = 'artículo'                      # nombre singular en el admin
+        verbose_name_plural = 'artículos'              # nombre plural en el admin
+        db_table = 'blog_articulos'                    # nombre real de la tabla en la DB
+        unique_together = [['autor', 'titulo']]        # restricción de unicidad compuesta
+        indexes = [
+            models.Index(fields=['slug']),
+            models.Index(fields=['-creado_en', 'autor']),
+        ]
+```
+
+---
+
+### Métodos especiales en modelos
+
+```python
+class Post(models.Model):
+    titulo = models.CharField(max_length=200)
+    slug = models.SlugField(unique=True)
+
+    def __str__(self):
+        return self.titulo     # representación en admin y shell
+
+    def __repr__(self):
+        return f'<Post id={self.pk} titulo={self.titulo!r}>'
+
+    def get_absolute_url(self):
+        # URL canónica — CreateView y UpdateView la usan como success_url automáticamente
+        return reverse('blog:detalle', kwargs={'slug': self.slug})
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            from django.utils.text import slugify
+            self.slug = slugify(self.titulo)
+        super().save(*args, **kwargs)    # siempre llamar al save del padre
+```
+
+---
+
+### Relaciones entre modelos
+
+```python
+class Categoria(models.Model):
+    nombre = models.CharField(max_length=100)
+
+    def __str__(self):
+        return self.nombre
+
+
+class Post(models.Model):
+    titulo = models.CharField(max_length=200)
+
+    # Muchos Posts → una Categoria
+    categoria = models.ForeignKey(
+        Categoria,
+        on_delete=models.CASCADE,
+        related_name='posts',    # Categoria.posts.all() → todos sus posts
+    )
+
+    # Muchos Posts ↔ Muchos Tags (tabla intermedia automática)
+    etiquetas = models.ManyToManyField('Etiqueta', blank=True)
+```
+
+**Opciones de `on_delete`:**
+
+| Opción        | Qué hace                                           |
+| ------------- | -------------------------------------------------- |
+| `CASCADE`     | Borra los objetos relacionados                     |
+| `SET_NULL`    | Pone el campo en NULL (requiere `null=True`)       |
+| `SET_DEFAULT` | Pone el campo en su `default`                      |
+| `PROTECT`     | Lanza error si hay objetos relacionados            |
+| `DO_NOTHING`  | No hace nada — puede violar integridad referencial |
+
+---
+
+### Validadores y el método `clean()`
+
+**Validadores de campo:**
+
+```python
+from django.core.validators import MinValueValidator, RegexValidator
+from django.core.exceptions import ValidationError
+
+def solo_mayusculas(valor):
+    if valor != valor.upper():
+        raise ValidationError('%(valor)s debe estar en mayúsculas', params={'valor': valor})
+
+class Producto(models.Model):
+    precio = models.DecimalField(
+        max_digits=10, decimal_places=2,
+        validators=[MinValueValidator(0.01)]
+    )
+    codigo = models.CharField(
+        max_length=10,
+        validators=[solo_mayusculas, RegexValidator(r'^[A-Z]{3}-\d{4}$', 'Formato: AAA-0000')]
+    )
+```
+
+**`clean()` — validación que cruza campos:**
+
+```python
+class Evento(models.Model):
+    inicio = models.DateTimeField()
+    fin = models.DateTimeField()
+    capacidad = models.PositiveIntegerField()
+    inscriptos = models.PositiveIntegerField(default=0)
+
+    def clean(self):
+        if self.inicio and self.fin and self.fin <= self.inicio:
+            raise ValidationError({'fin': 'La fecha de fin debe ser posterior al inicio.'})
+        if self.inscriptos > self.capacidad:
+            raise ValidationError('Los inscriptos superan la capacidad.')
+
+    def save(self, *args, **kwargs):
+        self.full_clean()    # ejecuta clean() + validadores — el ORM directo NO lo hace
+        super().save(*args, **kwargs)
+```
+
+Los formularios llaman a `full_clean()` automáticamente. El ORM directo (`obj.save()`) no lo llama — por eso hay que invocarlo manualmente en `save()` si querés que los validadores se apliquen siempre.
+
+---
+
+### ORM — Consultas básicas
+
+```python
+# CREATE
+post = Post.objects.create(titulo="Mi post", contenido="Hola")
+
+# READ
+todos = Post.objects.all()
+publicados = Post.objects.filter(publicado=True)
+post = Post.objects.get(id=1)                  # lanza DoesNotExist si no existe
+post = Post.objects.filter(pk=1).first()       # None si no existe
+
+# Filtros de campo (field lookups)
+Post.objects.filter(titulo__icontains='django')       # contiene, sin case
+Post.objects.filter(creado_en__year=2025)
+Post.objects.filter(categoria__nombre='Tecnología')   # a través de FK
+Post.objects.exclude(publicado=True)                  # inverso del filter
+
+# UPDATE
+post.titulo = "Nuevo título"
+post.save()
+Post.objects.filter(publicado=False).update(publicado=True)   # masivo
+
+# DELETE
+post.delete()
+Post.objects.filter(publicado=False).delete()   # masivo
+
+# Ordenar y limitar
+Post.objects.order_by('-creado_en')    # descendente (- al frente)
+Post.objects.all()[:5]                 # primeros 5 (LIMIT)
+```
+
+---
+
+### ORM — Optimización básica
+
+El problema más común es el **N+1 query** — una consulta por cada objeto en un loop:
+
+```python
+# ❌ N+1 — una consulta para posts + una por cada categoría
+posts = Post.objects.all()
+for post in posts:
+    print(post.categoria.nombre)   # SELECT extra por cada post
+```
+
+**`select_related`** — resuelve ForeignKey y OneToOne con un JOIN:
+
+```python
+# ✅ 1 sola consulta
+posts = Post.objects.select_related('categoria', 'autor').all()
+```
+
+**`prefetch_related`** — resuelve ManyToMany y relaciones inversas:
+
+```python
+# ✅ 2 consultas: posts + etiquetas
+posts = Post.objects.prefetch_related('etiquetas').all()
+```
+
+**`only()` y `defer()`** — traer solo los campos necesarios:
+
+```python
+Post.objects.only('titulo', 'creado_en')   # solo esos campos
+Post.objects.defer('contenido')            # todo menos contenido
+```
+
+**`values()` y `values_list()`** — cuando necesitás datos, no objetos:
+
+```python
+Post.objects.values('titulo', 'creado_en')          # lista de dicts
+Post.objects.values_list('titulo', flat=True)        # lista de strings
+```
+
+---
+
+## 22. Migraciones
+
+### Qué son las migraciones
+
+Una **migración** es la traducción de los cambios en tus modelos a instrucciones SQL que modifican la base de datos. Cada vez que creás o modificás un modelo, necesitás crear y aplicar una.
+
+```bash
+# Paso 1 — genera el archivo de migración (no toca la DB)
+python manage.py makemigrations
+
+# Paso 2 — aplica la migración a la base de datos
+python manage.py migrate
+```
+
+El flujo es SIEMPRE estos dos pasos en orden. Los archivos de migración viven en `app/migrations/` y se committean al repositorio — son el historial de cambios de la base de datos, igual que git es el historial del código.
+
+---
+
+### Comandos útiles
+
+```bash
+python manage.py showmigrations                        # estado de todas las migraciones
+python manage.py sqlmigrate blog 0001                  # ver el SQL sin aplicarlo
+python manage.py migrate blog 0002                     # volver a una migración anterior
+python manage.py makemigrations --name agregar_slug    # nombre descriptivo
+```
+
+---
+
+### Manejo de cambios en modelos
+
+| Cambio                           | Lo que hace Django                             |
+| -------------------------------- | ---------------------------------------------- |
+| Agregar campo con `default`      | Migración directa                              |
+| Agregar campo sin `default`      | Pide un default temporal o `null=True`         |
+| Renombrar un campo               | Pregunta si es rename o delete+add             |
+| Eliminar un campo                | Migración directa — los datos se pierden       |
+| Agregar/eliminar un modelo       | `CREATE TABLE` / `DROP TABLE`                  |
+
+Nunca edites migraciones ya aplicadas en producción — creá una nueva que corrija el estado.
+
+---
+
+### Data migrations — migraciones de datos
+
+Las **data migrations** modifican datos existentes en vez de (o además de) la estructura:
+
+```bash
+python manage.py makemigrations blog --empty --name poblar_categorias
+```
+
+```python
+# blog/migrations/0004_poblar_categorias.py
+from django.db import migrations
+
+def crear(apps, schema_editor):
+    Categoria = apps.get_model('blog', 'Categoria')   # modelo histórico — no importes directamente
+    Categoria.objects.create(nombre='Tecnología')
+    Categoria.objects.create(nombre='Ciencia')
+
+def revertir(apps, schema_editor):
+    Categoria = apps.get_model('blog', 'Categoria')
+    Categoria.objects.filter(nombre__in=['Tecnología', 'Ciencia']).delete()
+
+class Migration(migrations.Migration):
+    dependencies = [('blog', '0003_categoria')]
+    operations = [migrations.RunPython(crear, revertir)]
+```
+
+Siempre definís la función de reversión. Sin ella, no podés deshacer la migración.
+
+---
+
+### Squash y buenas prácticas
+
+```bash
+# Comprime migraciones del 0001 al 0010 en una sola
+python manage.py squashmigrations blog 0001 0010
+```
+
+**Buenas prácticas:**
+
+- Commitear SIEMPRE los archivos de migración
+- Nombrar descriptivamente: `makemigrations --name agregar_slug_post`
+- Ejecutar `migrate` como parte del deploy, no manualmente
+- Ante campo nuevo no-nullable: definir `default` o `null=True`
+
+---
+
+## 23. CRUD con FBV
+
+### Qué es CRUD
+
+CRUD son las cuatro operaciones fundamentales sobre datos:
+
+| Operación | HTTP | SQL    | Qué hace                        |
+| --------- | ---- | ------ | ------------------------------- |
+| Create    | POST | INSERT | Crear un nuevo registro         |
+| Read      | GET  | SELECT | Leer / listar registros         |
+| Update    | POST | UPDATE | Modificar un registro existente |
+| Delete    | POST | DELETE | Eliminar un registro            |
+
+---
+
+### ModelForm
+
+`ModelForm` genera los campos del formulario automáticamente a partir del modelo:
+
+```python
+# blog/forms.py
+from django import forms
+from .models import Post
+
+class PostForm(forms.ModelForm):
+    class Meta:
+        model = Post
+        fields = ['titulo', 'contenido', 'categoria', 'publicado']
+```
+
+---
+
+### El patrón GET/POST
+
+La lógica de cualquier vista con formulario es siempre la misma:
+
+```python
+from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib import messages
+from .forms import PostForm
+from .models import Post
+
+def crear_post(request):
+    if request.method == 'POST':
+        form = PostForm(request.POST)
+        if form.is_valid():
+            post = form.save(commit=False)    # no guarda aún
+            post.autor = request.user         # asignás lo que falta
+            post.save()
+            messages.success(request, 'Post creado.')
+            return redirect('blog:detalle', pk=post.pk)
+        # si no es válido, cae al return con el form que tiene los errores
+    else:
+        form = PostForm()
+    return render(request, 'blog/form_post.html', {'form': form})
+
+def editar_post(request, pk):
+    post = get_object_or_404(Post, pk=pk)
+    if request.method == 'POST':
+        form = PostForm(request.POST, instance=post)   # instance → edición
+        if form.is_valid():
+            form.save()
+            return redirect('blog:detalle', pk=post.pk)
+    else:
+        form = PostForm(instance=post)    # pre-completa el formulario
+    return render(request, 'blog/form_post.html', {'form': form, 'post': post})
+```
+
+`commit=False` devuelve el objeto sin guardarlo — ideal para asignar campos que no están en el formulario. `get_object_or_404` devuelve el objeto o lanza 404 automáticamente.
+
+---
+
+### Lista, detalle y eliminar
+
+```python
+def lista_posts(request):
+    posts = Post.objects.filter(publicado=True).select_related('categoria', 'autor')
+    return render(request, 'blog/lista.html', {'posts': posts})
+
+def detalle_post(request, pk):
+    post = get_object_or_404(Post, pk=pk, publicado=True)
+    return render(request, 'blog/detalle.html', {'post': post})
+
+def eliminar_post(request, pk):
+    post = get_object_or_404(Post, pk=pk)
+    if request.method == 'POST':
+        post.delete()
+        messages.success(request, 'Post eliminado.')
+        return redirect('blog:lista')
+    return render(request, 'blog/confirmar_eliminar.html', {'post': post})
+```
+
+---
+
+### Templates para CRUD
+
+```html
+<!-- blog/templates/blog/form_post.html -->
+{% extends "blog/base.html" %}
+{% block contenido %}
+<h1>{% if post %}Editar{% else %}Nuevo{% endif %} Post</h1>
+<form method="post">
+  {% csrf_token %}
+  {{ form.as_p }}
+  <button type="submit">Guardar</button>
+  <a href="{% url 'blog:lista' %}">Cancelar</a>
+</form>
+{% endblock %}
+```
+
+`{% csrf_token %}` es **obligatorio** en todo formulario POST. Protege contra ataques Cross-Site Request Forgery. Sin él, Django rechaza el envío con error 403.
+
+```html
+<!-- blog/templates/blog/confirmar_eliminar.html -->
+{% extends "blog/base.html" %}
+{% block contenido %}
+<h1>¿Eliminar "{{ post.titulo }}"?</h1>
+<form method="post">
+  {% csrf_token %}
+  <button type="submit">Confirmar</button>
+  <a href="{% url 'blog:lista' %}">Cancelar</a>
+</form>
+{% endblock %}
+```
+
+---
+
+## 24. Class-Based Views (CBV)
+
+### Por qué existen las CBV
+
+Con FBV, el patrón de listar, crear y editar objetos se repite siempre igual. Las **CBV** tienen ese patrón implementado — vos solo configurás lo que es específico de tu modelo.
+
+```python
+# FBV — escribís todo el patrón
+def lista_posts(request):
+    posts = Post.objects.filter(publicado=True)
+    return render(request, 'blog/lista.html', {'posts': posts})
+
+# CBV — Django implementa el patrón
+from django.views.generic import ListView
+
+class PostListView(ListView):
+    model = Post
+    template_name = 'blog/lista.html'
+    context_object_name = 'posts'
+    queryset = Post.objects.filter(publicado=True)
+```
+
+| Situación                                            | Recomendación     |
+| ---------------------------------------------------- | ----------------- |
+| CRUD estándar (list, detail, create, update, delete) | CBV               |
+| Lógica muy personalizada o compleja                  | FBV               |
+| Primera vez aprendiendo el patrón                    | FBV para entender |
+
+---
+
+### ListView y DetailView
+
+```python
+from django.views.generic import ListView, DetailView
+from .models import Post
+
+class PostListView(ListView):
+    model = Post
+    template_name = 'blog/lista.html'
+    context_object_name = 'posts'
+    paginate_by = 10
+
+    def get_queryset(self):
+        return Post.objects.filter(publicado=True).select_related('categoria', 'autor')
+
+    def get_context_data(self, **kwargs):    # agregar datos extra al contexto
+        context = super().get_context_data(**kwargs)
+        context['total'] = self.get_queryset().count()
+        return context
+
+
+class PostDetailView(DetailView):
+    model = Post
+    template_name = 'blog/detalle.html'
+    context_object_name = 'post'
+
+    def get_object(self, queryset=None):    # personalizar cómo se busca el objeto
+        return get_object_or_404(Post, slug=self.kwargs['slug'], publicado=True)
+```
+
+---
+
+### CreateView, UpdateView y DeleteView
+
+```python
+from django.views.generic.edit import CreateView, UpdateView, DeleteView
+from django.urls import reverse_lazy
+from .models import Post
+
+class PostCreateView(CreateView):
+    model = Post
+    fields = ['titulo', 'contenido', 'categoria', 'publicado']
+    template_name = 'blog/form_post.html'
+    # Si el modelo define get_absolute_url(), no necesitás success_url
+
+    def form_valid(self, form):
+        form.instance.autor = self.request.user   # asignar antes de guardar
+        return super().form_valid(form)
+
+
+class PostUpdateView(UpdateView):
+    model = Post
+    fields = ['titulo', 'contenido', 'categoria', 'publicado']
+    template_name = 'blog/form_post.html'
+
+
+class PostDeleteView(DeleteView):
+    model = Post
+    template_name = 'blog/confirmar_eliminar.html'
+    success_url = reverse_lazy('blog:lista')
+```
+
+`reverse_lazy` — como `reverse` pero se evalúa en el momento de uso. Necesario en atributos de clase porque las URLs no están cargadas cuando Python importa el módulo.
+
+---
+
+### URLs para CBV
+
+```python
+# blog/urls.py
+from django.urls import path
+from .views import PostListView, PostDetailView, PostCreateView, PostUpdateView, PostDeleteView
+
+app_name = 'blog'
+
+urlpatterns = [
+    path('', PostListView.as_view(), name='lista'),
+    path('<int:pk>/', PostDetailView.as_view(), name='detalle'),
+    path('nuevo/', PostCreateView.as_view(), name='crear'),
+    path('<int:pk>/editar/', PostUpdateView.as_view(), name='editar'),
+    path('<int:pk>/eliminar/', PostDeleteView.as_view(), name='eliminar'),
+]
+```
+
+Las CBV van al `urls.py` con `.as_view()` — convierte la clase en la función que espera Django.
+
+---
+
+### Mixins — composición de comportamiento
+
+Un **mixin** en CBV es una clase que agrega comportamiento específico. Se combinan por herencia múltiple, siempre ANTES de la CBV base:
+
+```python
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+
+class SoloAutorMixin(UserPassesTestMixin):
+    def test_func(self):
+        return self.request.user == self.get_object().autor
+
+class PostUpdateView(LoginRequiredMixin, SoloAutorMixin, UpdateView):
+    model = Post
+    fields = ['titulo', 'contenido']
+```
+
+**Mixin reutilizable — filtrar por usuario:**
+
+```python
+class FiltrarPorUsuarioMixin:
+    def get_queryset(self):
+        return super().get_queryset().filter(autor=self.request.user)
+
+class MisPostsView(LoginRequiredMixin, FiltrarPorUsuarioMixin, ListView):
+    model = Post
+
+class EditarMiPostView(LoginRequiredMixin, FiltrarPorUsuarioMixin, UpdateView):
+    model = Post
+    fields = ['titulo', 'contenido']
+```
+
+Un mixin bien definido elimina duplicación en múltiples vistas.
+
+---
+
+## 25. Panel de Admin
+
+### Qué es el admin de Django
+
+Django incluye un panel de administración automático — interfaz web completa para gestionar los datos de tu app sin escribir una sola vista.
+
+```bash
+python manage.py createsuperuser   # usuario, email, password
+# → http://127.0.0.1:8000/admin/
+```
+
+---
+
+### Registrar modelos y ModelAdmin
+
+```python
+# blog/admin.py
+from django.contrib import admin
+from django.utils.html import format_html
+from .models import Post, Categoria
+
+admin.site.register(Categoria)    # registro básico
+
+@admin.register(Post)             # registro con configuración
+class PostAdmin(admin.ModelAdmin):
+    list_display = ('titulo', 'autor', 'categoria', 'estado_badge', 'creado_en')
+    list_display_links = ('titulo',)
+    list_editable = ('publicado',)
+    list_filter = ('publicado', 'categoria', 'creado_en')
+    search_fields = ('titulo', 'contenido', 'autor__username')
+    prepopulated_fields = {'slug': ('titulo',)}
+    date_hierarchy = 'creado_en'
+    ordering = ('-creado_en',)
+    readonly_fields = ('creado_en', 'actualizado_en')
+    raw_id_fields = ('autor',)    # buscador en vez de select — útil con muchos usuarios
+
+    fieldsets = (
+        ('Contenido', {'fields': ('titulo', 'slug', 'contenido')}),
+        ('Metadata', {
+            'fields': ('autor', 'categoria', 'publicado'),
+            'classes': ('collapse',)    # sección colapsable
+        }),
+    )
+
+    def estado_badge(self, obj):
+        color = 'green' if obj.publicado else 'gray'
+        texto = 'Publicado' if obj.publicado else 'Borrador'
+        return format_html('<span style="color:{}">{}</span>', color, texto)
+    estado_badge.short_description = 'Estado'
+
+    actions = ['publicar_posts']
+
+    def publicar_posts(self, request, queryset):
+        queryset.update(publicado=True)
+    publicar_posts.short_description = "Publicar seleccionados"
+```
+
+`format_html` escapa los valores automáticamente — siempre usalo cuando inyectés HTML con datos del usuario.
+
+---
+
+### Inlines — editar relacionados dentro del padre
+
+```python
+class PostInline(admin.TabularInline):
+    model = Post
+    fields = ('titulo', 'publicado')
+    extra = 1               # formularios vacíos para agregar
+    show_change_link = True
+
+@admin.register(Categoria)
+class CategoriaAdmin(admin.ModelAdmin):
+    list_display = ('nombre', 'cantidad_posts')
+    inlines = [PostInline]
+
+    def cantidad_posts(self, obj):
+        return obj.posts.count()
+    cantidad_posts.short_description = 'Posts'
+```
+
+`TabularInline` y `StackedInline` permiten editar objetos relacionados directamente en el formulario del padre — sin salir de la página de Categoría para crear Posts.
+
+---
+
+## 26. Autenticación y Sesiones
+
+### El modelo User de Django
+
+Django incluye un modelo `User` completo con autenticación lista para usar:
+
+```python
+from django.contrib.auth.models import User
+
+# Campos por defecto:
+# username, password (hasheado), email, first_name, last_name
+# is_active, is_staff, is_superuser
+# date_joined, last_login, groups, user_permissions
+```
+
+Para relacionar tu modelo con el usuario:
+
+```python
+class Post(models.Model):
+    autor = models.ForeignKey(User, on_delete=models.CASCADE, related_name='posts')
+```
+
+---
+
+### Registro de usuarios
+
+```python
+# blog/forms.py
+from django.contrib.auth.forms import UserCreationForm
+from django import forms
+from django.contrib.auth.models import User
+
+class RegistroForm(UserCreationForm):
+    email = forms.EmailField(required=True)
+
+    class Meta:
+        model = User
+        fields = ['username', 'email', 'password1', 'password2']
+```
+
+```python
+# blog/views.py
+from django.contrib.auth import login
+
+def registro(request):
+    if request.method == 'POST':
+        form = RegistroForm(request.POST)
+        if form.is_valid():
+            usuario = form.save()
+            login(request, usuario)    # loguear automáticamente después del registro
+            return redirect('blog:lista')
+    else:
+        form = RegistroForm()
+    return render(request, 'registration/registro.html', {'form': form})
+```
+
+---
+
+### Login y Logout
+
+Django incluye vistas listas para usar — solo hay que conectar las URLs:
+
+```python
+# mi_sitio/urls.py
+from django.contrib.auth import views as auth_views
+
+urlpatterns = [
+    path('admin/', admin.site.urls),
+    path('accounts/login/', auth_views.LoginView.as_view(), name='login'),
+    path('accounts/logout/', auth_views.LogoutView.as_view(), name='logout'),
+    path('accounts/registro/', views.registro, name='registro'),
+    path('blog/', include('blog.urls', namespace='blog')),
+]
+```
+
+```python
+# settings.py
+LOGIN_REDIRECT_URL = 'blog:lista'
+LOGOUT_REDIRECT_URL = 'login'
+LOGIN_URL = 'login'
+```
+
+Django busca el template de login en `registration/login.html`:
+
+```html
+<!-- templates/registration/login.html -->
+{% extends "blog/base.html" %}
+{% block contenido %}
+<h1>Iniciar Sesión</h1>
+<form method="post">
+  {% csrf_token %}
+  {{ form.as_p }}
+  <button type="submit">Entrar</button>
+</form>
+<p><a href="{% url 'registro' %}">¿No tenés cuenta? Registrate</a></p>
+{% endblock %}
+```
+
+---
+
+### Sesiones y el usuario actual
+
+`request.user` siempre está disponible en vistas y templates:
+
+```python
+def mi_vista(request):
+    if request.user.is_authenticated:
+        print(request.user.username)
+```
+
+```html
+{% if user.is_authenticated %}
+  <p>Hola, {{ user.username }} — <a href="{% url 'logout' %}">Salir</a></p>
+{% else %}
+  <a href="{% url 'login' %}">Iniciar sesión</a>
+{% endif %}
+```
+
+---
+
+### Proteger vistas
+
+**FBV — decorador `@login_required`:**
+
+```python
+from django.contrib.auth.decorators import login_required
+
+@login_required
+def crear_post(request):
+    ...
+```
+
+Si el usuario no está logueado, redirige a `settings.LOGIN_URL`.
+
+**CBV — mixin `LoginRequiredMixin`:**
+
+```python
+from django.contrib.auth.mixins import LoginRequiredMixin
+
+class PostCreateView(LoginRequiredMixin, CreateView):
+    model = Post
+    fields = ['titulo', 'contenido']
+```
+
+Los mixins siempre van PRIMERO en la herencia.
+
+**Permisos específicos:**
+
+```python
+from django.contrib.auth.decorators import permission_required
+from django.contrib.auth.mixins import PermissionRequiredMixin
+
+@permission_required('blog.add_post')
+def crear_post(request): ...
+
+class PostCreateView(PermissionRequiredMixin, CreateView):
+    permission_required = 'blog.add_post'
+```
+
+Los permisos se crean automáticamente para cada modelo: `<app>.<add|change|delete|view>_<modelo>`. Para `Post` en la app `blog`: `blog.add_post`, `blog.change_post`, `blog.delete_post`, `blog.view_post`.
